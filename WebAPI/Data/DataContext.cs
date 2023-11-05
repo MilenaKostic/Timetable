@@ -7,11 +7,11 @@ namespace WebAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base (options) {}
 
-        public DbSet<Calendar> Calendars { get; set; }
-        public DbSet<Models.Route> Routes { get; set; }
-        public DbSet<CalendarDate> CalendarDates { get; set; }
-        public DbSet<StopTime> StopTimes { get; set; }
-        public DbSet<Trip> Trips { get; set; }
+        public DbSet<Calendar> calendars { get; set; }
+        public DbSet<Models.Route> routes { get; set; }
+        public DbSet<CalendarDate> calendarDates { get; set; }
+        public DbSet<StopTime> stopTimes { get; set; }
+        public DbSet<Trip> trips { get; set; }
 
        
     }

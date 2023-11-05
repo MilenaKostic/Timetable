@@ -20,29 +20,30 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
- 
+
 app.UseHttpsRedirection();
- 
+
 //CALENDAR 
-async Task<List<Calendar>> GetCalendars(DataContext context) => await context.Calendars.ToListAsync();
+async Task<List<Calendar>> GetCalendars(DataContext context) => await context.calendars.ToListAsync();
 
 
-app.MapPost("Add/Calendar", async (DataContext context, Calendar item) =>
+app.MapPost("/Calendar", async (DataContext context, Calendar item) =>
 {
-    context.Calendars.Add(item);
+    context.calendars.Add(item);
     await context.SaveChangesAsync();
     return Results.Ok(await GetCalendars(context));
 });
 
 
 app.MapGet("/Calendar", async (DataContext context) =>
-await context.Calendars.ToListAsync()); 
+await context.calendars.ToListAsync());
 
-app.MapGet("/Calendar/{serviceId}", async (DataContext context, int serviceId) => await context.Calendars.FindAsync(serviceId) is Calendar item? Results.Ok(item) : Results.NotFound("CALENDAR NOT FOUND")).WithName("GetCalendarById");
+app.MapGet("/Calendar/{Id}", async (DataContext context, int Id) =>
+    await context.calendars.FindAsync(Id) is Calendar item ? Results.Ok(item) : Results.NotFound("CALENDAR NOT FOUND"));
 
-app.MapPut("/Calendar/{serviceId}", async (DataContext context, Calendar item, int serviceId) =>
+app.MapPut("/Calendar/{Id}", async (DataContext context, Calendar item, int Id) =>
 {
-    var calendarItem = await context.Calendars.FindAsync(serviceId);
+    var calendarItem = await context.calendars.FindAsync(Id);
     if (calendarItem == null)
         return Results.NotFound("Calendar not found");
 
@@ -56,60 +57,61 @@ app.MapPut("/Calendar/{serviceId}", async (DataContext context, Calendar item, i
     calendarItem.startDate = item.startDate;
     calendarItem.endDate = item.endDate;
 
-    context.Calendars.Update(calendarItem);
+    context.calendars.Update(calendarItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetCalendars(context));
 });
 
-app.MapDelete("/Calendar/{serviceId}", async (DataContext context, int serviceId) =>
+app.MapDelete("/Calendar/{Id}", async (DataContext context, int Id) =>
 {
-    var calendarItem = await context.Calendars.FindAsync(serviceId);
+    var calendarItem = await context.calendars.FindAsync(Id);
     if (calendarItem == null)
         return Results.NotFound("Calendar not found");
 
-    context.Remove(calendarItem);
+    context.calendars.Remove(calendarItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetCalendars(context));
 });
 
 //CALENDAR DATES 
-async Task<List<CalendarDate>> GetCalendarDates(DataContext context) => await context.CalendarDates.ToListAsync();
+async Task<List<CalendarDate>> GetCalendarDates(DataContext context) => await context.calendarDates.ToListAsync();
 
 app.MapPost("/CalendarDate", async (DataContext context, CalendarDate item) =>
 {
-    context.CalendarDates.Add(item);
+    context.calendarDates.Add(item);
     await context.SaveChangesAsync();
     return Results.Ok(GetCalendarDates(context));
 });
 
 app.MapGet("/CalendarDate", async (DataContext context) =>
-    await context.CalendarDates.ToListAsync());
+    await context.calendarDates.ToListAsync());
 
-app.MapGet("/CalendarDate/{serviceId}", async (DataContext context, int serviceId) =>
-    await context.CalendarDates.FindAsync(serviceId) is CalendarDate item ? Results.Ok(item) : Results.NotFound("CalendarDate not found")
+app.MapGet("/CalendarDate/{Id}", async (DataContext context, int Id) =>
+    await context.calendarDates.FindAsync(Id) is CalendarDate item ? Results.Ok(item) : Results.NotFound("CalendarDate not found")
 );
 
-app.MapPut("/CalendarDate/{serviceId}", async (DataContext context, CalendarDate item, int serviceId) =>
+app.MapPut("/CalendarDate/{Id}", async (DataContext context, CalendarDate item, int Id) =>
 {
-    var calendarDateItem = await context.CalendarDates.FindAsync(serviceId);
-    if (calendarDateItem == null)
-       return Results.NotFound("CalendarDate not found");
-
-    calendarDateItem.date = item.date;
-
-    context.CalendarDates.Update(calendarDateItem);
-    await context.SaveChangesAsync();
-    return Results.Ok(await GetCalendarDates(context));
-    
-});
-
-app.MapDelete("/CalendarDate/{serviceDate}", async (DataContext context, int serviceId) =>
-{ 
-    var calendarDateItem = await context.CalendarDates.FindAsync(serviceId);
+    var calendarDateItem = await context.calendarDates.FindAsync(Id);
     if (calendarDateItem == null)
         return Results.NotFound("CalendarDate not found");
 
-    context.CalendarDates.Remove(calendarDateItem);
+    calendarDateItem.date = item.date;
+    calendarDateItem.serviceId = item.serviceId;
+
+    context.calendarDates.Update(calendarDateItem);
+    await context.SaveChangesAsync();
+    return Results.Ok(await GetCalendarDates(context));
+
+});
+
+app.MapDelete("/CalendarDate/{Id}", async (DataContext context, int Id) =>
+{
+    var calendarDateItem = await context.calendarDates.FindAsync(Id);
+    if (calendarDateItem == null)
+        return Results.NotFound("CalendarDate not found");
+
+    context.calendarDates.Remove(calendarDateItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetCalendarDates(context));
 
@@ -117,28 +119,26 @@ app.MapDelete("/CalendarDate/{serviceDate}", async (DataContext context, int ser
 });
 
 //ROUTE 
-async Task<List<WebAPI.Models.Route>> GetRoutes(DataContext context) => await context.Routes.ToListAsync();
+async Task<List<WebAPI.Models.Route>> GetRoutes(DataContext context) => await context.routes.ToListAsync();
 
-app.MapPost("/Route", async(DataContext context, WebAPI.Models.Route item) =>
+app.MapPost("/Route", async (DataContext context, WebAPI.Models.Route item) =>
 {
-    context.Routes.Add(item);
+    context.routes.Add(item);
     await context.SaveChangesAsync();
     return Results.Ok(await GetRoutes(context));
 
 });
 
 app.MapGet("/Route", async (DataContext context) =>
-{
-    await context.Routes.ToListAsync();
-});
+    await context.routes.ToListAsync());
 
-app.MapGet("/Route/{routeId}", async (DataContext context, int routeId) =>
-    await context.Routes.FindAsync(routeId) is WebAPI.Models.Route item ? Results.Ok(item) : Results.NotFound("Route not found")
+app.MapGet("/Route/{Id}", async (DataContext context, int Id) =>
+    await context.routes.FindAsync(Id) is WebAPI.Models.Route item ? Results.Ok(item) : Results.NotFound("Route not found")
 );
 
-app.MapPut("Route/{routeId}", async (DataContext context, WebAPI.Models.Route item,  int routeId) =>
+app.MapPut("Route/{Id}", async (DataContext context, WebAPI.Models.Route item, int Id) =>
 {
-    var routeItem = await context.Routes.FindAsync(routeId);
+    var routeItem = await context.routes.FindAsync(Id);
 
     if (routeItem == null)
         return Results.NotFound("Result not found");
@@ -147,44 +147,42 @@ app.MapPut("Route/{routeId}", async (DataContext context, WebAPI.Models.Route it
     routeItem.routeColor = item.routeColor;
 
     await context.SaveChangesAsync();
-    return Results.Ok(await GetRoutes(context)); 
+    return Results.Ok(await GetRoutes(context));
 });
 
-app.MapDelete("/Route/{routeId}", async (DataContext context, int routeId) =>
+app.MapDelete("/Route/{Id}", async (DataContext context, int Id) =>
 {
-   var routeItem = await context.Routes.FindAsync(routeId);
+    var routeItem = await context.routes.FindAsync(Id);
 
     if (routeItem == null)
-       return Results.NotFound("Route not found ");
+        return Results.NotFound("Route not found ");
 
-    context.Routes.Remove(routeItem);
+    context.routes.Remove(routeItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetRoutes(context));
 
 });
 
 //TRIP
-async Task<List<Trip>> GetTrips(DataContext context) => await context.Trips.ToListAsync();
+async Task<List<Trip>> GetTrips(DataContext context) => await context.trips.ToListAsync();
 
-app.MapPost("Add/Trip", async (DataContext context, Trip item) =>
+app.MapPost("/Trip", async (DataContext context, Trip item) =>
 {
-    context.Trips.Add(item);
+    context.trips.Add(item);
     await context.SaveChangesAsync();
     return Results.Ok(await GetTrips(context));
-}); 
-
-app.MapGet("/Trip", async(DataContext context)=>
-{
-    await context.Trips.ToListAsync();
 });
 
-app.MapGet("/Trip/{tripId}", async (DataContext context, int tripId) =>
-    await context.Trips.FindAsync(tripId) is Trip item ? Results.Ok(item) : Results.NotFound("Trip not found")
+app.MapGet("/Trip", async (DataContext context) =>
+    await context.trips.ToListAsync());
+
+app.MapGet("/Trip/{Id}", async (DataContext context, int Id) =>
+    await context.trips.FindAsync(Id) is Trip item ? Results.Ok(item) : Results.NotFound("Trip not found")
 );
 
-app.MapPut("/Trip/{tripId}", async (DataContext context, Trip item, int tripId) =>
+app.MapPut("/Trip/{Id}", async (DataContext context, Trip item, int Id) =>
 {
-    var tripItem = await context.Trips.FindAsync(tripId);
+    var tripItem = await context.trips.FindAsync(Id);
 
     if (tripItem == null)
         return Results.NotFound("Trip not found");
@@ -192,44 +190,93 @@ app.MapPut("/Trip/{tripId}", async (DataContext context, Trip item, int tripId) 
     tripItem.routeId = item.routeId;
     tripItem.serviceId = item.serviceId;
 
-    context.Trips.Update(tripItem);
+    context.trips.Update(tripItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetTrips(context));
 
 });
 
-app.MapDelete("/Trip/{tripId}", async (DataContext context, int tripId) =>
+app.MapDelete("/Trip/{Id}", async (DataContext context, int Id) =>
 {
-    var tripItem = await context.Trips.FindAsync(tripId);
+    var tripItem = await context.trips.FindAsync(Id);
 
     if (tripItem == null)
         return Results.NotFound("Trip not found");
 
-    context.Trips.Remove(tripItem);
+    context.trips.Remove(tripItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetTrips(context));
 });
 
+//STOP
+
+async Task<List<Stop>> GetStops(DataContext context) => await context.stops.ToListAsync();
+
+app.MapPost("/Stop", async (DataContext context, Stop item) =>
+{
+    context.stops.Add(item);
+    await context.SaveChangesAsync();
+    return Results.Ok(GetStops(context));
+});
+
+app.MapGet("/Stop", async (DataContext context) =>
+    await context.stops.ToListAsync());
+
+app.MapGet("/Stop/{Id}", async (DataContext context, int Id) =>
+    await context.stops.FindAsync(Id) is Stop item ? Results.Ok(item) : Results.NotFound("Stop not found")
+);
+
+app.MapPut("/Stop/{Id}", async (DataContext context, Stop item, int Id) =>
+{
+    var stopItem = await context.stops.FindAsync(Id);
+    if (stopItem == null)
+        return Results.NotFound("Stop not found");
+
+    stopItem.stopName = item.stopName;
+    stopItem.stopLon = item.stopLon;
+    stopItem.stopLat = item.stopLat;
+
+    context.stops.Update(stopItem);
+    await context.SaveChangesAsync();
+    return Results.Ok(await GetStops(context));
+
+});
+
+app.MapDelete("/Stop/{Id}", async (DataContext context, int Id) =>
+{
+    var stopItem = await context.stops.FindAsync(Id);
+    if (stopItem == null)
+        return Results.NotFound("Stop not found");
+
+    context.stops.Remove(stopItem);
+    await context.SaveChangesAsync();
+    return Results.Ok(await GetStops(context));
+
+
+});
+
+
+
 //STOP TIMES 
-async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.StopTimes.ToListAsync();
+async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.stopTimes.ToListAsync();
 
 app.MapPost("StopTimes", async (DataContext context, StopTime item) =>
-{ 
-    context.StopTimes.Add(item);
+{
+    context.stopTimes.Add(item);
     await context.SaveChangesAsync();
     return Results.Ok(GetStopTimes(context));
 });
 
 app.MapGet("StopTimes", async (DataContext context) =>
-    await context.StopTimes.ToListAsync()
+    await context.stopTimes.ToListAsync()
 );
 
-app.MapGet("StopTimes", async (DataContext context, int tripId) =>
-    await context.StopTimes.FindAsync(tripId) is StopTime item ? Results.Ok(item) : Results.NotFound("Stop time not found"));
+app.MapGet("StopTimes/{Id}", async (DataContext context, int Id) =>
+    await context.stopTimes.FindAsync(Id) is StopTime item ? Results.Ok(item) : Results.NotFound("Stop time not found"));
 
-app.MapPut("StopTimes/{tripId}", async (DataContext context, int tripId, StopTime item) =>
+app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTime item) =>
 {
-    var StopTimeItem = await context.StopTimes.FindAsync(tripId);
+    var StopTimeItem = await context.stopTimes.FindAsync(Id);
 
     if (StopTimeItem == null)
         return Results.NotFound("Stop time not found");
@@ -237,19 +284,19 @@ app.MapPut("StopTimes/{tripId}", async (DataContext context, int tripId, StopTim
     StopTimeItem.stopId = item.stopId;
     StopTimeItem.stopSequence = item.stopSequence;
 
-    context.StopTimes.Update(StopTimeItem);
+    context.stopTimes.Update(StopTimeItem);
     await context.SaveChangesAsync();
     return Results.Ok(GetStopTimes(context));
 });
 
-app.MapDelete("StopTimes/{tripId}", async (DataContext context, int tripId) =>
+app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>
 {
-    var StopTimeItem = await context.StopTimes.FindAsync(tripId);
+    var StopTimeItem = await context.stopTimes.FindAsync(Id);
 
     if (StopTimeItem == null)
         return Results.NotFound("Stop time not found");
 
-    context.StopTimes.Remove(StopTimeItem);
+    context.stopTimes.Remove(StopTimeItem);
     await context.SaveChangesAsync();
     return Results.Ok(await GetStopTimes(context));
 

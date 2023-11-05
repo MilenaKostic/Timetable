@@ -10,8 +10,8 @@
         public bool friday { get; set; }
         public bool saturday { get; set; }
         public bool sunday { get; set; }
-        public DateOnly startDate { get; set; }
-        public DateOnly endDate { get; set; }
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
 
     }
 }
