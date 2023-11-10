@@ -1,8 +1,8 @@
-﻿namespace WebAPI.Models
+﻿namespace Shared.Models
 {
     public class Calendar
     {
-        public int serviceId  { get; set; }
+        public int Id  { get; set; }
         public bool monday {  get; set; }
         public bool tuesday { get; set; }
         public bool wednesday { get; set; }

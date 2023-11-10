@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Models
+﻿namespace Shared.Models
 {
     public class CalendarDate
     {

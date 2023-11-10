@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication-BusTimeline", "WebApplication-BusTimeline\WebApplication-BusTimeline.csproj", "{B576054D-13EC-41E1-85D0-79F98C689E07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{A56EAF96-CBF9-4846-81BE-86FA2187A690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{A56EAF96-CBF9-4846-81BE-86FA2187A690}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{2E1BD115-C7D4-4D63-A3B9-6414562674DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,5 +29,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50790266-800C-4243-B8B4-369C7909DAAA}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{2e1bd115-c7d4-4d63-a3b9-6414562674da}*SharedItemsImports = 13
+		Shared\Shared.projitems*{a56eaf96-cbf9-4846-81be-86fa2187a690}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

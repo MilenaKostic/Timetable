@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2e1bd115-c7d4-4d63-a3b9-6414562674da</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDateDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\RouteDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTimeDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\TripDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Calendar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CalendarDate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Route.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Stop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\StopTime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Trip.cs" />
+  </ItemGroup>
+</Project>
