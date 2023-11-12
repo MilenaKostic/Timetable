@@ -9,17 +9,18 @@
     <Import_RootNamespace>Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDateDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\RouteDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTimeDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\TripDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Calendar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\CalendarDate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Route.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Stop.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\StopTime.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Trip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDateGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDateGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RoutePostDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripGetDTO.cs" />
   </ItemGroup>
 </Project>

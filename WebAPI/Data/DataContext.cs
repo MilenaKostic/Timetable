@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Models;
+using WebAPI.Models;
 
 namespace WebAPI.Data
 {
@@ -8,7 +8,7 @@ namespace WebAPI.Data
         public DataContext(DbContextOptions<DataContext> options) : base (options) {}
 
         public DbSet<Calendar> calendars { get; set; }
-        public DbSet<Shared.Models.Route> routes { get; set; }
+        public DbSet<Models.Route> routes { get; set; }
         public DbSet<CalendarDate> calendarDates { get; set; }
         public DbSet<Stop> stops { get; set; }
         public DbSet<StopTime> stopTimes { get; set; }

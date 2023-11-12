@@ -1,10 +1,23 @@
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
-using Shared.Models;
+using WebAPI.Models;
 using Shared.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Shared.DTO.Route;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.TagActionsBy(d =>
+    {
+        var rootSegment = d.RelativePath?
+            .Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)
+            .FirstOrDefault() ?? "Home";
+        return new List<string> { rootSegment! };
+    });
+});
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,12 +34,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
- 
+
 app.UseHttpsRedirection();
- 
+
+
 //CALENDAR 
 async Task<List<Calendar>> GetCalendars(DataContext context) => await context.calendars.ToListAsync();
-
 
 app.MapPost("/Calendar", async (DataContext context, Calendar item) =>
 {
@@ -35,12 +48,50 @@ app.MapPost("/Calendar", async (DataContext context, Calendar item) =>
     return Results.Ok(await GetCalendars(context));
 });
 
-
 app.MapGet("/Calendar", async (DataContext context) =>
-await context.calendars.ToListAsync()); 
+{
+    var _calendars = await context.calendars.ToListAsync();
 
-app.MapGet("/Calendar/{Id}", async (DataContext context, int Id) => 
-    await context.calendars.FindAsync(Id) is Calendar item ? Results.Ok(item) : Results.NotFound("CALENDAR NOT FOUND"));
+    var _calendarsDTO = _calendars.Select(row => new CalendarGetBasicDTO()
+    {
+        Id = row.Id,
+        Monday = row.monday,
+        Tuesday = row.tuesday,
+        Wednesday = row.wednesday,
+        Thursday = row.thursday,
+        Friday = row.friday,
+        Saturday = row.saturday,
+        Sunday = row.sunday
+    }).ToList();
+
+    return Results.Ok(_calendarsDTO); 
+});
+
+app.MapGet("/Calendar/{Id}", async (DataContext context, int Id) =>
+{
+    var _calendar = await context.calendars.FirstOrDefaultAsync(c => c.Id == Id);
+
+    if (_calendar == null)
+        return Results.NotFound("Route not found");
+
+    var _calendarDTO = new CalendarGetDTO()
+    {
+        Id = _calendar.Id,
+        Monday = _calendar.monday,
+        Tuesday = _calendar.thursday,
+        Wednesday = _calendar.wednesday,
+        Thursday = _calendar.thursday,
+        Friday = _calendar.friday,
+        Saturday = _calendar.saturday,
+        Sunday = _calendar.sunday,
+        StartDate = _calendar.startDate,
+        EndDate = _calendar.endDate
+    };
+
+    return Results.Ok(_calendarDTO); 
+    
+
+});    
 
 app.MapPut("/Calendar/{Id}", async (DataContext context, Calendar item, int Id) =>
 {
@@ -85,11 +136,36 @@ app.MapPost("/CalendarDate", async (DataContext context, CalendarDate item) =>
 });
 
 app.MapGet("/CalendarDate", async (DataContext context) =>
-    await context.calendarDates.ToListAsync());
+{
+    var _calendarDates = await context.calendarDates.ToListAsync();
+
+    var _calendarDatesDTO = _calendarDates.Select(row => new CalendarDateGetBasicDTO()
+    {
+        Id = row.Id,
+        Date = row.date
+    }).ToList();
+
+    return Results.Ok(_calendarDatesDTO);     
+    
+});
 
 app.MapGet("/CalendarDate/{Id}", async (DataContext context, int Id) =>
-    await context.calendarDates.FindAsync(Id) is CalendarDate item ? Results.Ok(item) : Results.NotFound("CalendarDate not found")
-);
+{
+    var _calendarDate = await context.calendarDates.FirstOrDefaultAsync(c => c.Id == Id);
+
+    if(_calendarDate == null)
+        return Results.NotFound("Calendar not found");
+
+    var _calendarDateDTO = new CalendarDateGetDTO()
+    {
+        Id = _calendarDate.Id,
+        Date = _calendarDate.date,
+        ServiceId = _calendarDate.serviceId
+    };
+
+    return Results.Ok(_calendarDateDTO); 
+
+});
 
 app.MapPut("/CalendarDate/{Id}", async (DataContext context, CalendarDate item, int Id) =>
 {
@@ -120,9 +196,9 @@ app.MapDelete("/CalendarDate/{Id}", async (DataContext context, int Id) =>
 });
 
 //ROUTE 
-async Task<List<Shared.Models.Route>> GetRoutes(DataContext context) => await context.routes.ToListAsync();
+async Task<List<WebAPI.Models.Route>> GetRoutes(DataContext context) => await context.routes.ToListAsync();
 
-app.MapPost("/Route", async(DataContext context, Shared.Models.Route item) =>
+app.MapPost("/Route", async(DataContext context, WebAPI.Models.Route item) =>
 {
     context.routes.Add(item);
     await context.SaveChangesAsync();
@@ -131,13 +207,39 @@ app.MapPost("/Route", async(DataContext context, Shared.Models.Route item) =>
 });
 
 app.MapGet("/Route", async (DataContext context) =>
-    await context.routes.ToListAsync());
+{
+    var _routes = await context.routes.ToListAsync();
+
+    var _routesDTO = _routes.Select(row => new RouteGetBasicDTO()
+    {
+        Id = row.Id,
+        Name = row.routeName
+
+    }).ToList();
+
+    return Results.Ok(_routesDTO);
+
+});
 
 app.MapGet("/Route/{Id}", async (DataContext context, int Id) =>
-    await context.routes.FindAsync(Id) is Shared.Models.Route item ? Results.Ok(item) : Results.NotFound("Route not found")
-);
+{
+    var _route = await context.routes.FirstOrDefaultAsync(r => r.Id == Id);
 
-app.MapPut("Route/{Id}", async (DataContext context, Shared.Models.Route item,  int Id) =>
+    if (_route == null)
+        return Results.NotFound("Route not found");
+
+    var _routeDTO = new RouteGetDTO()
+    {
+        Id = _route.Id,
+        Name = _route.routeName,
+        Color = _route.routeColor
+    };
+
+    return Results.Ok(_routeDTO); 
+
+});
+
+app.MapPut("/Route/{Id}", async (DataContext context, WebAPI.Models.Route item,  int Id) =>
 {
     var routeItem = await context.routes.FindAsync(Id);
 
@@ -164,6 +266,7 @@ app.MapDelete("/Route/{Id}", async (DataContext context, int Id) =>
 
 });
 
+
 //TRIP
 async Task<List<Trip>> GetTrips(DataContext context) => await context.trips.ToListAsync();
 
@@ -175,11 +278,36 @@ app.MapPost("/Trip", async (DataContext context, Trip item) =>
 }); 
 
 app.MapGet("/Trip", async(DataContext context)=>
-    await context.trips.ToListAsync());
+{
+    var _trips = await context.trips.ToListAsync();
+
+    var _tripsDTO = _trips.Select(row => new TripGetBasicDTO()
+    {
+        Id = row.Id
+
+    }).ToList();
+
+    return Results.Ok(_tripsDTO); 
+
+});
 
 app.MapGet("/Trip/{Id}", async (DataContext context, int Id) =>
-    await context.trips.FindAsync(Id) is Trip item ? Results.Ok(item) : Results.NotFound("Trip not found")
-);
+{
+    var _trip = await context.trips.FirstOrDefaultAsync(t => t.Id == Id);
+
+    if (_trip == null)
+        return Results.NotFound("Trip not found");
+
+    var _tripDTO = new TripGetDTO()
+    {
+        Id = _trip.Id,
+        RouteId = _trip.routeId,
+        ServiceId = _trip.serviceId
+    };
+
+    return Results.Ok(_tripDTO);
+
+});
 
 app.MapPut("/Trip/{Id}", async (DataContext context, Trip item, int Id) =>
 {
@@ -221,11 +349,37 @@ app.MapPost("/Stop", async (DataContext context, Stop item) =>
 });
 
 app.MapGet("/Stop", async (DataContext context) =>
-    await context.stops.ToListAsync());
+{ 
+    var _stops = await context.stops.ToListAsync();
+
+    var _stopsDTO = _stops.Select(row => new StopGetBasicDTO()
+    {
+        Id = row.Id,
+        Name = row.stopName
+    }).ToList();
+
+    return Results.Ok(_stopsDTO); 
+
+});
 
 app.MapGet("/Stop/{Id}", async (DataContext context, int Id) =>
-    await context.stops.FindAsync(Id) is Stop item ? Results.Ok(item) : Results.NotFound("Stop not found")
-);
+{
+    var _stop = await context.stops.FirstOrDefaultAsync(s => s.Id == Id);
+
+    if (_stop == null)
+        return Results.NotFound("Stop not found");
+
+    var _stopDTO = new StopGetDTO()
+    {
+        Id = _stop.Id,
+        Name = _stop.stopName,
+        Lat = _stop.stopLat,
+        Lon = _stop.stopLon
+    };
+
+    return Results.Ok(_stopDTO); 
+
+});
 
 app.MapPut("/Stop/{Id}", async (DataContext context, Stop item, int Id) =>
 {
@@ -256,8 +410,6 @@ app.MapDelete("/Stop/{Id}", async (DataContext context, int Id) =>
 
 });
 
-
-
 //STOP TIMES 
 async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.stopTimes.ToListAsync();
 
@@ -269,11 +421,38 @@ app.MapPost("StopTimes", async (DataContext context, StopTime item) =>
 });
 
 app.MapGet("StopTimes", async (DataContext context) =>
-    await context.stopTimes.ToListAsync()
-);
+   {
+       var _stopTimes = await context.stopTimes.ToListAsync();
+
+       var _stopTimesDTO = _stopTimes.Select(row => new StopTimeGetBasicDTO()
+       {
+           Id = row.Id,
+           StopSequence = row.stopSequence
+
+       }).ToList();
+
+       return Results.Ok(_stopTimesDTO); 
+    
+   });
 
 app.MapGet("StopTimes/{Id}", async (DataContext context, int Id) =>
-    await context.stopTimes.FindAsync(Id) is StopTime item ? Results.Ok(item) : Results.NotFound("Stop time not found"));
+{ 
+    var _stopTime = await context.stopTimes.FirstOrDefaultAsync(s => s.Id == Id);
+
+    if (_stopTime == null)
+        return Results.NotFound("Stop time not found");
+
+    var _stopTimeDTO = new StopTimeGetDTO()
+    {
+        Id = _stopTime.Id,
+        StopId = _stopTime.stopId,
+        StopSequence = _stopTime.stopSequence,
+        TripId = _stopTime.tripId
+    };
+
+    return Results.Ok(_stopTimeDTO);
+
+});
 
 app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTime item) =>
 {
@@ -304,8 +483,3 @@ app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>
 });
 
 app.Run();
-
-//internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-//{
-//    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-//}

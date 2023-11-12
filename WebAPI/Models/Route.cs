@@ -1,4 +1,4 @@
-﻿namespace Shared.Models
+﻿namespace WebAPI.Models
 {
     public class Route
     {
