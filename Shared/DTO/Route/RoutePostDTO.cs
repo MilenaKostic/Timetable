@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Shared.DTO.Route
 {
-    internal class RoutePostDTO
+    public class RoutePostDTO
     {
+        public string? Name { get; set; }
+        public string? Color { get; set; }
     }
 }

@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Shared.DTO
 {
-    public class CalendarGetDTO
+    public class CalendarPostDTO
     {
-        public int Id { get; set; }
         public bool Monday { get; set; }
         public bool Tuesday { get; set; }
         public bool Wednesday { get; set; }
@@ -16,6 +15,5 @@ namespace Shared.DTO
         public bool Sunday { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
     }
 }

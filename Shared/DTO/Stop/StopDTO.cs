@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.DTO
 {
-    public class StopGetDTO
+    public class StopDTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.DTO
 {
-    public class TripGetDTO
+    public class TripDTO
     {
         public int RouteId { get; set; }
         public int ServiceId { get; set; }

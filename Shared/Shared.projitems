@@ -10,17 +10,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDateGetBasicDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDateGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDateDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\CalendarDate\CalendarDatePostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarGetBasicDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarGetDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarPostDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteGetBasicDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RoutePostDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimePostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopGetBasicDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeGetBasicDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Stop\StopPostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripGetBasicDTO.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripGetDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripPostDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserPostDTO.cs" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.DTO.Route
 {
-    public class RouteGetDTO
+    public class RouteDTO
     {
         public Int32 Id { get; set; }
         public string? Name { get; set; }
