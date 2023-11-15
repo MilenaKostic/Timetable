@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Shared.DTO
 {
-    public class CalendarDatePostDTO
+    public class TripPutDTO
     {
+        public int RouteId { get; set; }
         public int ServiceId { get; set; }
-        public DateTime Date { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.DTO
 {
-    public class CalendarDatePostDTO
+    public class CalendarDatePutDTO
     {
         public int ServiceId { get; set; }
         public DateTime Date { get; set; }

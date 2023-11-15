@@ -130,25 +130,44 @@ app.MapGet("/Calendar/{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapPut("/Calendar/{Id}", async (DataContext context, Calendar item, int Id) =>
+app.MapPut("/Calendar/{Id}", async (DataContext context, CalendarPutDTO calendarDTO, int Id) =>
 {
-    var calendarItem = await context.calendars.FindAsync(Id);
-    if (calendarItem == null)
-        return Results.NotFound("Calendar not found");
+    var _checkExist = await context.calendars.FirstOrDefaultAsync(c => c.Id == Id);
 
-    calendarItem.monday = item.monday;
-    calendarItem.tuesday = item.tuesday;
-    calendarItem.wednesday = item.wednesday;
-    calendarItem.thursday = item.thursday;
-    calendarItem.friday = item.friday;
-    calendarItem.saturday = item.saturday;
-    calendarItem.sunday = item.sunday;
-    calendarItem.startDate = item.startDate;
-    calendarItem.endDate = item.endDate;
+    if (_checkExist == null)
+        return Results.BadRequest("Calendar does not exists");
 
-    context.calendars.Update(calendarItem);
+
+    _checkExist.monday = calendarDTO.Monday;
+    _checkExist.tuesday = calendarDTO.Tuesday;
+    _checkExist.wednesday = calendarDTO.Wednesday;
+    _checkExist.thursday = calendarDTO.Thursday;
+    _checkExist.friday = calendarDTO.Friday;
+    _checkExist.saturday = calendarDTO.Saturday;
+    _checkExist.sunday = calendarDTO.Sunday;
+    _checkExist.startDate = calendarDTO.StartDate;
+    _checkExist.endDate = calendarDTO.EndDate;
+    
+
+    context.calendars.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetCalendars(context));
+
+    var _retVal = new CalendarDTO()
+    {
+        Id = _checkExist.Id,
+        Monday = _checkExist.monday,
+        Tuesday = _checkExist.tuesday,
+        Wednesday = _checkExist.wednesday,
+        Thursday = _checkExist.thursday,
+        Friday = _checkExist.friday,
+        Saturday = _checkExist.saturday,
+        Sunday = _checkExist.sunday,
+        StartDate = _checkExist.startDate,
+        EndDate = _checkExist.endDate
+
+    };
+
+    return Results.Ok(_retVal);
 });
 
 app.MapDelete("/Calendar/{Id}", async (DataContext context, int Id) =>
@@ -159,7 +178,7 @@ app.MapDelete("/Calendar/{Id}", async (DataContext context, int Id) =>
 
     context.calendars.Remove(calendarItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetCalendars(context));
+    return Results.Ok("Successfuly deleted");
 });
 
 //CALENDAR DATES 
@@ -241,19 +260,30 @@ app.MapGet("/CalendarDate/By Date:{Date}", async (DataContext context, DateTime 
 
 });
 
-app.MapPut("/CalendarDate/{Id}", async (DataContext context, CalendarDate item, int Id) =>
+app.MapPut("/CalendarDate/{Id}", async (DataContext context, CalendarDatePutDTO calendarDateDTO, int Id) =>
 {
-    var calendarDateItem = await context.calendarDates.FindAsync(Id);
-    if (calendarDateItem == null)
-       return Results.NotFound("CalendarDate not found");
+    var _checkExist = await context.calendarDates.FirstOrDefaultAsync(c => c.Id == Id);
 
-    calendarDateItem.date = item.date;
-    calendarDateItem.serviceId = item.serviceId; 
+    if (_checkExist == null)
+        return Results.BadRequest("Calendar date does not exists");
 
-    context.calendarDates.Update(calendarDateItem);
+
+    _checkExist.date = calendarDateDTO.Date;
+    _checkExist.serviceId = calendarDateDTO.ServiceId;
+
+    context.calendarDates.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetCalendarDates(context));
-    
+
+    var _retVal = new CalendarDateDTO()
+    {
+        Id = _checkExist.Id,
+        ServiceId = _checkExist.serviceId,
+        Date = _checkExist.date
+
+    };
+
+    return Results.Ok(_retVal);
+
 });
 
 app.MapDelete("/CalendarDate/{Id}", async (DataContext context, int Id) =>
@@ -351,18 +381,28 @@ app.MapGet("/Route/By Name:{Name}", async (DataContext context, String Name) =>
 
 });
 
-app.MapPut("/Route/{Id}", async (DataContext context, WebAPI.Models.Route item,  int Id) =>
+app.MapPut("/Route/{Id}", async (DataContext context, RoutePutDTO routeDTO, int Id) =>
 {
-    var routeItem = await context.routes.FindAsync(Id);
+    var _checkExist = await context.routes.FirstOrDefaultAsync(c => c.Id == Id);
 
-    if (routeItem == null)
-        return Results.NotFound("Result not found");
+    if (_checkExist == null)
+        return Results.BadRequest("Calendar does not exists");
 
-    routeItem.routeName = item.routeName;
-    routeItem.routeColor = item.routeColor;
+    _checkExist.routeColor = routeDTO.Color;
+    _checkExist.routeName = routeDTO.Name;
 
+    context.routes.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetRoutes(context)); 
+
+    var _retVal = new RouteDTO()
+    {
+        Id = _checkExist.Id,
+        Color = _checkExist.routeColor,
+        Name = _checkExist.routeName
+
+    };
+
+    return Results.Ok(_retVal);
 });
 
 app.MapDelete("/Route/{Id}", async (DataContext context, int Id) =>
@@ -440,19 +480,27 @@ app.MapGet("/Trip/{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapPut("/Trip/{Id}", async (DataContext context, Trip item, int Id) =>
+app.MapPut("/Trip/{Id}", async (DataContext context, TripPostDTO tripDTO, int Id) =>
 {
-    var tripItem = await context.trips.FindAsync(Id);
+    var _checkExist = await context.trips.FirstOrDefaultAsync(c => c.Id == Id);
 
-    if (tripItem == null)
-        return Results.NotFound("Trip not found");
+    if (_checkExist == null)
+        return Results.BadRequest("Trip not exists");
 
-    tripItem.routeId = item.routeId;
-    tripItem.serviceId = item.serviceId;
+    _checkExist.routeId = tripDTO.RouteId;
+    _checkExist.serviceId = tripDTO.ServiceId;
 
-    context.trips.Update(tripItem);
+    context.trips.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetTrips(context));
+
+    var _retVal = new TripDTO()
+    {
+        Id = _checkExist.Id,
+        RouteId = _checkExist.routeId,
+        ServiceId = _checkExist.serviceId
+    };
+
+    return Results.Ok(_retVal);
 
 });
 
@@ -553,19 +601,29 @@ app.MapGet("/Stop/By Name:{Name}", async (DataContext context, string Name) =>
 
 });
 
-app.MapPut("/Stop/{Id}", async (DataContext context, Stop item, int Id) =>
+app.MapPut("/Stop/{Id}", async (DataContext context, StopPutDTO stopDTO, int Id) =>
 {
-    var stopItem = await context.stops.FindAsync(Id);
-    if (stopItem == null)
-        return Results.NotFound("Stop not found");
+    var _checkExist = await context.stops.FirstOrDefaultAsync(c => c.Id == Id);
 
-    stopItem.stopName = item.stopName;
-    stopItem.stopLon = item.stopLon;
-    stopItem.stopLat = item.stopLat;
+    if (_checkExist == null)
+        return Results.BadRequest("Stop do not exists");
 
-    context.stops.Update(stopItem);
+    _checkExist.stopName = stopDTO.Name;
+    _checkExist.stopLat = stopDTO.Lat;
+    _checkExist.stopLon = stopDTO.Lon;
+
+    context.stops.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetStops(context));
+
+    var _retVal = new StopDTO()
+    {
+        Id = _checkExist.Id,
+        Name = _checkExist.stopName,
+        Lat = _checkExist.stopLat,
+        Lon = _checkExist.stopLon
+    };
+
+    return Results.Ok(_retVal);
 
 });
 
@@ -647,19 +705,29 @@ app.MapGet("StopTimes/{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTime item) =>
+app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTimePutDTO stopTimeDTO) =>
 {
-    var StopTimeItem = await context.stopTimes.FindAsync(Id);
+    var _checkExist = await context.stopTimes.FirstOrDefaultAsync(c => c.Id == Id);
 
-    if (StopTimeItem == null)
-        return Results.NotFound("Stop time not found");
+    if (_checkExist == null)
+        return Results.BadRequest("Stop time do not exists");
 
-    StopTimeItem.stopId = item.stopId;
-    StopTimeItem.stopSequence = item.stopSequence;
+    _checkExist.tripId = stopTimeDTO.TripId;
+    _checkExist.stopId = stopTimeDTO.StopId;
+    _checkExist.stopSequence = stopTimeDTO.StopSequence;
 
-    context.stopTimes.Update(StopTimeItem);
+    context.stopTimes.Update(_checkExist);
     await context.SaveChangesAsync();
-    return Results.Ok(GetStopTimes(context));
+
+    var _retVal = new StopTimeDTO()
+    {
+        Id = _checkExist.Id,
+        TripId = _checkExist.tripId,
+        StopId= _checkExist.stopId,
+        StopSequence = _checkExist.stopSequence
+    };
+
+    return Results.Ok(_retVal);
 });
 
 app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>  
@@ -770,6 +838,50 @@ app.MapGet("Users/By Username:{Username}", async (DataContext context, string Us
 
     return Results.Ok(_userDTO);
 
+});
+
+app.MapPut("Users/{Id}", async (DataContext context, UserPutDTO userDTO, int Id) =>
+{
+    var _checkExist = await context.users.FirstOrDefaultAsync(u => u.Id == Id);
+
+    if (_checkExist == null)
+        return Results.BadRequest("User do not exists");
+
+    _checkExist.name = userDTO.name;
+    _checkExist.lastname = userDTO.lastname;
+    _checkExist.address = userDTO.address;
+    _checkExist.email = userDTO.email;
+    _checkExist.username = userDTO.username;
+    _checkExist.password = userDTO.password;
+
+    context.users.Update(_checkExist);
+    await context.SaveChangesAsync();
+
+    var _retVal = new UserDTO()
+    {
+        Id = _checkExist.Id,
+        Name = _checkExist.name,
+        Lastname = _checkExist.lastname,
+        Address = _checkExist.address,
+        Email = _checkExist.email,
+        Username = _checkExist.username,
+        Password = _checkExist.password
+
+    };
+
+    return Results.Ok(_retVal);
+
+});
+
+app.MapDelete("/Users/{Id}", async (DataContext context, int Id) =>
+{
+    var userItem = await context.users.FindAsync(Id);
+    if (userItem == null)
+        return Results.NotFound("User not found");
+
+    context.users.Remove(userItem);
+    await context.SaveChangesAsync();
+    return Results.Ok("Successfuly deleted");
 });
 
 
