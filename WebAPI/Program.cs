@@ -40,7 +40,7 @@ app.UseHttpsRedirection();
 
 
 //CALENDAR 
-async Task<List<Calendar>> GetCalendars(DataContext context) => await context.calendars.ToListAsync();
+//async Task<List<Calendar>> GetCalendars(DataContext context) => await context.calendars.ToListAsync();
 
 app.MapPost("/Calendar", async (DataContext context, CalendarPostDTO item) =>
 {
@@ -178,11 +178,11 @@ app.MapDelete("/Calendar/{Id}", async (DataContext context, int Id) =>
 
     context.calendars.Remove(calendarItem);
     await context.SaveChangesAsync();
-    return Results.Ok("Successfuly deleted");
+    return Results.Ok("Successfully deleted");
 });
 
 //CALENDAR DATES 
-async Task<List<CalendarDate>> GetCalendarDates(DataContext context) => await context.calendarDates.ToListAsync();
+//async Task<List<CalendarDate>> GetCalendarDates(DataContext context) => await context.calendarDates.ToListAsync();
 
 app.MapPost("/CalendarDate", async (DataContext context, CalendarDatePostDTO item) =>
 {
@@ -294,13 +294,13 @@ app.MapDelete("/CalendarDate/{Id}", async (DataContext context, int Id) =>
 
     context.calendarDates.Remove(calendarDateItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetCalendarDates(context));
+    return Results.Ok("Successfully deleted");
 
 
 });
 
 //ROUTE 
-async Task<List<WebAPI.Models.Route>> GetRoutes(DataContext context) => await context.routes.ToListAsync();
+//async Task<List<WebAPI.Models.Route>> GetRoutes(DataContext context) => await context.routes.ToListAsync();
 
 app.MapPost("/Route", async(DataContext context, RoutePostDTO item) =>
 {
@@ -414,13 +414,13 @@ app.MapDelete("/Route/{Id}", async (DataContext context, int Id) =>
 
     context.routes.Remove(routeItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetRoutes(context));
+    return Results.Ok("Successfully deleted");
 
 });
 
 
 //TRIP
-async Task<List<Trip>> GetTrips(DataContext context) => await context.trips.ToListAsync();
+//async Task<List<Trip>> GetTrips(DataContext context) => await context.trips.ToListAsync();
 
 app.MapPost("/Trip", async (DataContext context, TripPostDTO item) =>
 {
@@ -513,12 +513,12 @@ app.MapDelete("/Trip/{Id}", async (DataContext context, int Id) =>
 
     context.trips.Remove(tripItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetTrips(context));
+    return Results.Ok("Successfully deleted");
 });
 
 //STOP
 
-async Task<List<Stop>> GetStops(DataContext context) => await context.stops.ToListAsync();
+//async Task<List<Stop>> GetStops(DataContext context) => await context.stops.ToListAsync();
 
 app.MapPost("/Stop", async (DataContext context, StopPostDTO item) =>
 {
@@ -635,13 +635,13 @@ app.MapDelete("/Stop/{Id}", async (DataContext context, int Id) =>
 
     context.stops.Remove(stopItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetStops(context));
+    return Results.Ok("Successfully deleted");
 
 
 });
 
 //STOP TIMES 
-async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.stopTimes.ToListAsync();
+//async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.stopTimes.ToListAsync();
 
 app.MapPost("StopTimes", async (DataContext context, StopTimePostDTO item) =>
 {
@@ -739,12 +739,12 @@ app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>
 
     context.stopTimes.Remove(StopTimeItem);
     await context.SaveChangesAsync();
-    return Results.Ok(await GetStopTimes(context));
+    return Results.Ok("Successfully deleted");
 
 });
 
 //USER
-async Task<List<User>> GetUsers(DataContext context) => await context.users.ToListAsync();
+//async Task<List<User>> GetUsers(DataContext context) => await context.users.ToListAsync();
 
 app.MapPost("Users", async (DataContext context, UserPostDTO item) =>
 {
@@ -881,7 +881,7 @@ app.MapDelete("/Users/{Id}", async (DataContext context, int Id) =>
 
     context.users.Remove(userItem);
     await context.SaveChangesAsync();
-    return Results.Ok("Successfuly deleted");
+    return Results.Ok("Successfully deleted");
 });
 
 
