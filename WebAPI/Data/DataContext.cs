@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shared.DTO.User;
 using WebAPI.Models;
 
 namespace WebAPI.Data

@@ -6,6 +6,7 @@ using Shared.DTO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shared.DTO.Route;
 using Shared.DTO.User;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -167,7 +168,7 @@ app.MapPut("/Calendar/{Id}", async (DataContext context, CalendarPutDTO calendar
 
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 });
 
 app.MapDelete("/Calendar/{Id}", async (DataContext context, int Id) =>
@@ -224,7 +225,7 @@ app.MapGet("/CalendarDate", async (DataContext context) =>
     
 });
 
-app.MapGet("/CalendarDate/By Id:{Id}", async (DataContext context, int Id) =>
+app.MapGet("/CalendarDate/ById:{Id}", async (DataContext context, int Id) =>
 {
     var _calendarDate = await context.calendarDates.FirstOrDefaultAsync(c => c.Id == Id);
 
@@ -242,7 +243,7 @@ app.MapGet("/CalendarDate/By Id:{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapGet("/CalendarDate/By Date:{Date}", async (DataContext context, DateTime Date) =>
+app.MapGet("/CalendarDate/ByDate:{Date}", async (DataContext context, DateTime Date) =>
 {
     var _calendarDate = await context.calendarDates.FirstOrDefaultAsync(c => c.date.Equals(Date));
 
@@ -282,7 +283,7 @@ app.MapPut("/CalendarDate/{Id}", async (DataContext context, CalendarDatePutDTO 
 
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 
 });
 
@@ -345,7 +346,7 @@ app.MapGet("/Route", async (DataContext context) =>
 
 });
 
-app.MapGet("/Route/By Id:{Id}", async (DataContext context, int Id) =>
+app.MapGet("/Route/ById:{Id}", async (DataContext context, int Id) =>
 {
     var _route = await context.routes.FirstOrDefaultAsync(r => r.Id == Id);
 
@@ -363,7 +364,7 @@ app.MapGet("/Route/By Id:{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapGet("/Route/By Name:{Name}", async (DataContext context, String Name) =>
+app.MapGet("/Route/ByName:{Name}", async (DataContext context, String Name) =>
 {
     var _route = await context.routes.FirstOrDefaultAsync(r => r.routeName.Equals(Name));
 
@@ -402,7 +403,7 @@ app.MapPut("/Route/{Id}", async (DataContext context, RoutePutDTO routeDTO, int 
 
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 });
 
 app.MapDelete("/Route/{Id}", async (DataContext context, int Id) =>
@@ -500,7 +501,7 @@ app.MapPut("/Trip/{Id}", async (DataContext context, TripPostDTO tripDTO, int Id
         ServiceId = _checkExist.serviceId
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 
 });
 
@@ -563,7 +564,7 @@ app.MapGet("/Stop", async (DataContext context) =>
 
 });
 
-app.MapGet("/Stop/By Id:{Id}", async (DataContext context, int Id) =>
+app.MapGet("/Stop/ById:{Id}", async (DataContext context, int Id) =>
 {
     var _stop = await context.stops.FirstOrDefaultAsync(s => s.Id == Id);
 
@@ -582,7 +583,7 @@ app.MapGet("/Stop/By Id:{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapGet("/Stop/By Name:{Name}", async (DataContext context, string Name) =>
+app.MapGet("/Stop/ByName:{Name}", async (DataContext context, string Name) =>
 {
     var _stop = await context.stops.FirstOrDefaultAsync(s => s.stopName.Contains(Name));
 
@@ -623,7 +624,7 @@ app.MapPut("/Stop/{Id}", async (DataContext context, StopPutDTO stopDTO, int Id)
         Lon = _checkExist.stopLon
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 
 });
 
@@ -727,7 +728,7 @@ app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTimePutDTO 
         StopSequence = _checkExist.stopSequence
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 });
 
 app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>  
@@ -796,7 +797,7 @@ app.MapGet("Users", async (DataContext context) =>
 
 });
 
-app.MapGet("Users/By Id:{Id}", async (DataContext context, int Id) =>
+app.MapGet("Users/ById:{Id}", async (DataContext context, int Id) =>
 {
     var _user = await context.users.FirstOrDefaultAsync(u => u.Id == Id);
 
@@ -869,7 +870,7 @@ app.MapPut("Users/{Id}", async (DataContext context, UserPutDTO userDTO, int Id)
 
     };
 
-    return Results.Ok(_retVal);
+    return Results.Ok();
 
 });
 

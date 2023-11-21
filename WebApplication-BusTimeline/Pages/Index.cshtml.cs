@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApplication_BusTimeline.Pages
 {
@@ -12,8 +13,17 @@ namespace WebApplication_BusTimeline.Pages
             _logger = logger;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public string username { get; set; }
+
         public void OnGet()
         {
+            if(string.IsNullOrEmpty(username))
+            {
+                username = string.Empty;
+            }
+           
+
 
         }
     }

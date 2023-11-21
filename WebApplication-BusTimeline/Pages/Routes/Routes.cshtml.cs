@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApplication_BusTimeline.Pages
+namespace WebApplication_BusTimeline.Pages.Routes
 {
     public class MapModel : PageModel
     {

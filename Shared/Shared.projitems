@@ -35,7 +35,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripPutDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserGetBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserLoginDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserPostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserPutDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserRegisterDTO.cs" />
   </ItemGroup>
 </Project>
