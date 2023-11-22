@@ -2,3 +2,87 @@
 @model WebApplication_BusTimeline.Pages.Stops.StopsViewModel
 @{
 }
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<h3>Stanice</h3>
+
+@if(Model.LstStops?.Count > 0)
+{
+	<div class="row">
+		<div class="col-4">
+
+			<table class="table">
+				<thead class="table-primary">
+				<th></th>
+				<th>Id</th>
+				<th>Naziv</th>
+			</thead>
+
+				@foreach(var s in Model.LstStops)
+				{
+					<tr class="table-secondary">
+
+						<td>
+							<a href=@($"/Stops/StopsView?stanicaId={s.Id}")>
+								<button class="btn btn-primary" style="background-color:white; width:32px; height:30px" >
+									<svg style="position: center"width="50px" height="50px" viewBox="0 0 60.00 60.00" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(10,10), scale(0)"><path transform="translate(-20, -20), scale(3.75)" fill="#fcfcfc" d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z" strokewidth="0"></path></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.6"></g><g id="SVGRepo_iconCarrier"> <title>pin_sharp_circle [#624]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke-width="0.0002" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-223.000000, -5439.000000)" fill="#000000"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M176,5286.219 C176,5287.324 175.105,5288.219 174,5288.219 C172.895,5288.219 172,5287.324 172,5286.219 C172,5285.114 172.895,5284.219 174,5284.219 C175.105,5284.219 176,5285.114 176,5286.219 M174,5296 C174,5296 169,5289 169,5286 C169,5283.243 171.243,5281 174,5281 C176.757,5281 179,5283.243 179,5286 C179,5289 174,5296 174,5296 M174,5279 C170.134,5279 167,5282.134 167,5286 C167,5289.866 174,5299 174,5299 C174,5299 181,5289.866 181,5286 C181,5282.134 177.866,5279 174,5279" id="pin_sharp_circle-[#624]"> </path> </g> </g> </g> </g></svg>
+								</button>
+							</a>
+						</td>
+						
+						<td>@s.Id</td>
+						<td>@s.Name</td>
+
+					</tr>				
+
+				}
+				
+			</table>
+
+		</div>
+
+		<div class="col-8">
+			
+				@if(Model.SelectedStop != null)
+				{
+				<div style="height:120px; background-color:#e2e3e5; border-bottom: 1px solid black" >
+					<div style="height:36px; background-color:#cfe2ff; border-bottom: 1px solid black">
+						<h3>Informacije:</h3>
+						
+					</div>
+					<ul>
+						<li>Naziv stajališta: @Model.SelectedStop.Name</li>
+						Geografska širina: @Model.SelectedStop.Lat
+						Geografska dužina: @Model.SelectedStop.Lon
+					</ul>
+				</div>
+				}
+
+			
+
+			<div id="map" style="height: 600px;"></div>
+
+		</div>
+
+	</div>
+
+	<script>
+		var map = L.map('map').setView([44.968190, 19.608141], 16);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		}).addTo(map);
+
+		@if (Model.SelectedStop != null)
+		{
+			@($"var marker = L.marker([{Model.SelectedStop.Lat.ToString().Replace(",", ".")},  {Model.SelectedStop.Lon.ToString().Replace(",", ".")}]).addTo(map)")
+			;
+		}
+	</script>
+}
+
+else
+{
+	//Poruka 
+}
