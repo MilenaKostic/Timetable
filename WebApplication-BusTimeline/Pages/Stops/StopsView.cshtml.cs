@@ -18,7 +18,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
             {
                 try
                 {
-                    using(HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop"))
+                    using(HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();

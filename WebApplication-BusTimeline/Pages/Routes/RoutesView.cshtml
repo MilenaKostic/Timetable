@@ -1,0 +1,76 @@
+﻿@page
+@model MapModel
+@{
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<div class="form-group"> 
+<form method="get" action="/Routes/RoutesView">   
+    <label for="routeSelector">Prikaži liniju:</label>
+    <select id="routeSelector" name="routeName" onchange="this.form.submit()">
+        <option value="" disabled selected>Izaberite rutu</option>
+        <option value="kamenjar-crvena_cesma">Kamenjar-Crvena česma</option>
+        <option value="lacarak-kuper-mala_bosna">Laćarak-Kuper-Mala Bosna</option>
+        <option value="lacarak-industrijska_zona-groblje">Laćarak-Industrijska zona-Groblje</option>
+    </select>
+    <br/>
+</form>
+</div>
+
+
+
+@if(Model.routeName != null)
+{
+    <div><h7> Trenutno prikazana ruta je: @Model.routeName </h7></div>
+
+    @if(Model.LstStops != null)
+    {       
+        List<(double Lat, double Lon)> coordinates = new List<(double Lat, double Lon)>();
+
+        <script>          
+
+           @*  var coordinates = Array.from(@Html.Raw(Json.Serialize(Model.LstStops.Select(l => new double[] { l.Lat, l.Lon })))); *@
+             @foreach (var l in Model.LstStops)
+            {
+            coordinates.Add(new (@l.Lat,@l.Lon));
+             } 
+
+                    var polygon = L.polygon(coordinates).addTo(map);
+            map.fitBounds(polygon.getBounds());
+
+
+        </script>
+        
+    }
+
+ 
+}
+<div id="map" style="height: 600px;"></div>
+
+
+<script>
+    var map = L.map('map').setView([44.968190, 19.608141], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+</script>
+
+ 
+
+
+
+@* <script>
+    var map = L.map('map').setView([44.968190,19.608141], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    var polygon = L.polygon(coordinates).addTo(map);
+    map.fitBounds(polygon.getBounds());
+
+   
+</script> *@
+
+

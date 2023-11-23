@@ -86,7 +86,7 @@ app.MapPost("/Calendar", async (DataContext context, CalendarPostDTO item) =>
 
 });
 
-app.MapGet("/Calendar", async (DataContext context) =>
+app.MapGet("/Calendar/AllCalendars", async (DataContext context) =>
 {
     var _calendars = await context.calendars.ToListAsync();
 
@@ -211,7 +211,7 @@ app.MapPost("/CalendarDate", async (DataContext context, CalendarDatePostDTO ite
     return Results.Created("", _retValue);
 });
 
-app.MapGet("/CalendarDate", async (DataContext context) =>
+app.MapGet("/CalendarDate/AllCalendarDates", async (DataContext context) =>
 {
     var _calendarDates = await context.calendarDates.ToListAsync();
 
@@ -331,7 +331,7 @@ app.MapPost("/Route", async(DataContext context, RoutePostDTO item) =>
 
 });
 
-app.MapGet("/Route", async (DataContext context) =>
+app.MapGet("/Route/AllRoutes", async (DataContext context) =>
 {
     var _routes = await context.routes.ToListAsync();
 
@@ -449,7 +449,7 @@ app.MapPost("/Trip", async (DataContext context, TripPostDTO item) =>
     return Results.Created("",_retValue);
 }); 
 
-app.MapGet("/Trip", async(DataContext context)=>
+app.MapGet("/Trip/AllTrips", async(DataContext context)=>
 {
     var _trips = await context.trips.ToListAsync();
 
@@ -532,7 +532,8 @@ app.MapPost("/Stop", async (DataContext context, StopPostDTO item) =>
     {
         stopName = item.Name,
         stopLat = item.Lat,
-        stopLon = item.Lon
+        stopLon = item.Lon,
+        routeBelong = item.RouteBelong
     };
 
     context.stops.Add(_newStop);
@@ -543,14 +544,15 @@ app.MapPost("/Stop", async (DataContext context, StopPostDTO item) =>
         Id = _newStop.Id,
         Name = _newStop.stopName,
         Lat = _newStop.stopLat,
-        Lon = _newStop.stopLon
+        Lon = _newStop.stopLon,
+        RouteBelong = _newStop.routeBelong
     };
 
     return Results.Created("", _retVal); 
     
 });
 
-app.MapGet("/Stop", async (DataContext context) =>
+app.MapGet("/Stop/AllStops", async (DataContext context) =>
 { 
     var _stops = await context.stops.ToListAsync();
 
@@ -576,7 +578,8 @@ app.MapGet("/Stop/ById:{Id}", async (DataContext context, int Id) =>
         Id = _stop.Id,
         Name = _stop.stopName,
         Lat = _stop.stopLat,
-        Lon = _stop.stopLon
+        Lon = _stop.stopLon,
+        RouteBelong = _stop.routeBelong
     };
 
     return Results.Ok(_stopDTO); 
@@ -595,7 +598,28 @@ app.MapGet("/Stop/ByName:{Name}", async (DataContext context, string Name) =>
         Id = _stop.Id,
         Name = _stop.stopName,
         Lat = _stop.stopLat,
-        Lon = _stop.stopLon
+        Lon = _stop.stopLon,
+        RouteBelong = _stop.routeBelong
+    };
+
+    return Results.Ok(_stopDTO);
+
+});
+
+app.MapGet("/Stop/ByRouteBelong:{routeBelong}", async (DataContext context, string routeBelong) =>
+{
+    var _stop = await context.stops.FirstOrDefaultAsync(s => s.routeBelong.Contains(routeBelong));
+
+    if (_stop == null)
+        return Results.NotFound("Stop not found");
+
+    var _stopDTO = new StopDTO()
+    {
+        Id = _stop.Id,
+        Name = _stop.stopName,
+        Lat = _stop.stopLat,
+        Lon = _stop.stopLon,
+        RouteBelong = _stop.routeBelong
     };
 
     return Results.Ok(_stopDTO);
@@ -612,6 +636,7 @@ app.MapPut("/Stop/{Id}", async (DataContext context, StopPutDTO stopDTO, int Id)
     _checkExist.stopName = stopDTO.Name;
     _checkExist.stopLat = stopDTO.Lat;
     _checkExist.stopLon = stopDTO.Lon;
+    _checkExist.routeBelong = stopDTO.RouteBelong;
 
     context.stops.Update(_checkExist);
     await context.SaveChangesAsync();
@@ -621,7 +646,8 @@ app.MapPut("/Stop/{Id}", async (DataContext context, StopPutDTO stopDTO, int Id)
         Id = _checkExist.Id,
         Name = _checkExist.stopName,
         Lat = _checkExist.stopLat,
-        Lon = _checkExist.stopLon
+        Lon = _checkExist.stopLon,
+        RouteBelong = _checkExist.routeBelong
     };
 
     return Results.Ok();
@@ -641,10 +667,10 @@ app.MapDelete("/Stop/{Id}", async (DataContext context, int Id) =>
 
 });
 
-//STOP TIMES 
+//STOP TIME
 //async Task<List<StopTime>> GetStopTimes(DataContext context) => await context.stopTimes.ToListAsync();
 
-app.MapPost("StopTimes", async (DataContext context, StopTimePostDTO item) =>
+app.MapPost("/StopTime", async (DataContext context, StopTimePostDTO item) =>
 {
     var _checkExist = await context.stopTimes.FirstOrDefaultAsync(s => s.stopId.Equals(item.StopId) && s.tripId.Equals(item.TripId));
 
@@ -672,7 +698,7 @@ app.MapPost("StopTimes", async (DataContext context, StopTimePostDTO item) =>
     return Results.Created("", _retValue);
 });
 
-app.MapGet("StopTimes", async (DataContext context) =>
+app.MapGet("/StopTime/AllStopTimes", async (DataContext context) =>
    {
        var _stopTimes = await context.stopTimes.ToListAsync();
 
@@ -687,7 +713,7 @@ app.MapGet("StopTimes", async (DataContext context) =>
     
    });
 
-app.MapGet("StopTimes/{Id}", async (DataContext context, int Id) =>
+app.MapGet("/StopTime/{Id}", async (DataContext context, int Id) =>
 { 
     var _stopTime = await context.stopTimes.FirstOrDefaultAsync(s => s.Id == Id);
 
@@ -706,7 +732,7 @@ app.MapGet("StopTimes/{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTimePutDTO stopTimeDTO) =>
+app.MapPut("/StopTime/{Id}", async (DataContext context, int Id, StopTimePutDTO stopTimeDTO) =>
 {
     var _checkExist = await context.stopTimes.FirstOrDefaultAsync(c => c.Id == Id);
 
@@ -731,7 +757,7 @@ app.MapPut("StopTimes/{Id}", async (DataContext context, int Id, StopTimePutDTO 
     return Results.Ok();
 });
 
-app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>  
+app.MapDelete("/StopTime/{Id}", async (DataContext context, int Id) =>  
 {
     var StopTimeItem = await context.stopTimes.FindAsync(Id);
 
@@ -747,7 +773,7 @@ app.MapDelete("StopTimes/{Id}", async (DataContext context, int Id) =>
 //USER
 //async Task<List<User>> GetUsers(DataContext context) => await context.users.ToListAsync();
 
-app.MapPost("Users", async (DataContext context, UserPostDTO item) =>
+app.MapPost("/User", async (DataContext context, UserPostDTO item) =>
 {
     var _checkExist = await context.users.FirstOrDefaultAsync(s => s.username.Contains(item.username) || s.email.Contains(item.email));
 
@@ -781,7 +807,7 @@ app.MapPost("Users", async (DataContext context, UserPostDTO item) =>
     return Results.Created("", _retValue);
 });
 
-app.MapGet("Users", async (DataContext context) =>
+app.MapGet("/User/AllUsers", async (DataContext context) =>
 {
     var _users = await context.users.ToListAsync();
 
@@ -797,7 +823,7 @@ app.MapGet("Users", async (DataContext context) =>
 
 });
 
-app.MapGet("Users/ById:{Id}", async (DataContext context, int Id) =>
+app.MapGet("/User/ById:{Id}", async (DataContext context, int Id) =>
 {
     var _user = await context.users.FirstOrDefaultAsync(u => u.Id == Id);
 
@@ -819,7 +845,7 @@ app.MapGet("Users/ById:{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapGet("Users/By Username:{Username}", async (DataContext context, string Username) =>
+app.MapGet("/User/By Username:{Username}", async (DataContext context, string Username) =>
 {
     var _user = await context.users.FirstOrDefaultAsync(u => u.username == Username);
 
@@ -841,7 +867,7 @@ app.MapGet("Users/By Username:{Username}", async (DataContext context, string Us
 
 });
 
-app.MapPut("Users/{Id}", async (DataContext context, UserPutDTO userDTO, int Id) =>
+app.MapPut("/User/{Id}", async (DataContext context, UserPutDTO userDTO, int Id) =>
 {
     var _checkExist = await context.users.FirstOrDefaultAsync(u => u.Id == Id);
 
@@ -874,7 +900,7 @@ app.MapPut("Users/{Id}", async (DataContext context, UserPutDTO userDTO, int Id)
 
 });
 
-app.MapDelete("/Users/{Id}", async (DataContext context, int Id) =>
+app.MapDelete("/User/{Id}", async (DataContext context, int Id) =>
 {
     var userItem = await context.users.FindAsync(Id);
     if (userItem == null)
