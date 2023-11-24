@@ -11,6 +11,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
         public Int32? StanicaId { get; set; }
         public List<StopGetBasicDTO> LstStops { get; set; }
         public StopDTO SelectedStop { get; set; }
+        public string? ErrorMessage;
 
         public async Task OnGetAsync(string stanicaId)
         {
@@ -29,7 +30,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
                 }
                 catch(Exception e)
                 {
-                    //Osmisli 
+                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
                 }
             }
 
@@ -55,7 +56,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
                     }
                     catch(Exception e)
                     {
-                        //Osmisli
+                        ErrorMessage = "Željena stanica je trenutno nedostupna, pokušajte kasnije";
                     }
                 }
             }

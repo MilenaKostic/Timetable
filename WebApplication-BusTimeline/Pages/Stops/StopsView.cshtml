@@ -60,7 +60,13 @@
 				</div>
 				}
 
-			
+			@if(Model.ErrorMessage != null)
+			{			
+			<div class="alert alert-danger" role="alert" >
+				<h7>@Model.ErrorMessage</h7>
+			</div>
+				
+			}
 
 			<div id="map" style="height: 600px;"></div>
 

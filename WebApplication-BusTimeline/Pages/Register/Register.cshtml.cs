@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTO.User;
@@ -17,7 +17,7 @@ namespace WebApplication_BusTimeline.Pages
         private readonly DataContext _context;
         private readonly ILogger<RegisterModel> _logger;
 
-       
+        public string? ErrorMessage { get; set; }
         public RegisterModel(DataContext context,  ILogger<RegisterModel> logger)
         {
             _context = context;
@@ -42,8 +42,8 @@ namespace WebApplication_BusTimeline.Pages
 
             if (_userExist != null)
             {
-                //error = "Invalid register attempt, user already exists!";
-                return Page();
+                ErrorMessage = "Već postoji korisnik sa ovim korisničkim imenom, pokušajte ponovo!"; 
+                
             }
             else
             {
@@ -66,7 +66,7 @@ namespace WebApplication_BusTimeline.Pages
                 }
                 else
                 {
-                    return Page();
+                    ErrorMessage = "Šifre se ne podudaraju, pokušajte ponovo!";
                 }
                
 

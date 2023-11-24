@@ -12,6 +12,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		[BindProperty(SupportsGet = true)]
 		public string routeName { get; set; }
 		public List<StopDTO> LstStops { get; set; }
+		public string? ErrorMessage { get; set; }
 
 		public async Task OnGetAsync(string routeName)
 		{
@@ -39,8 +40,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
                     }
 					catch(Exception ex)
 					{
-						//Osmisli
-					}
+                        ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+                    }
 				}
 			}
 

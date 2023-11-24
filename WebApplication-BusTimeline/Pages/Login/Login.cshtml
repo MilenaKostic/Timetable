@@ -4,23 +4,26 @@
     ViewData["Title"] = "Login";
 }
 
-<div >
+<div class="mb-4">
     <h2>Login</h2>
     <form method="post">
-        <div >
+        <div class="mb-2">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" asp-for="UserLoginDTO.Username" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" asp-for="UserLoginDTO.Password" required>
         </div>
-        <div>
+        <div class="mb-4">
             <button type="submit">Login</button>
         </div>  
-       @*  <div>
-            <label asp-for="error"></label>
-        </div> *@
+        @if(Model.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert" style="margin-right: 800px;">
+                <h7>@Model.ErrorMessage</h7>
+            </div>
+        }
     </form>
 </div>
 

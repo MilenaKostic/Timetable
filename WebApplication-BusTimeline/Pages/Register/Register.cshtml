@@ -3,40 +3,47 @@
 @{
     ViewData["Title"] = "Register";
 }
-<div>
+<div class ="mb-4">
     <h2>Register</h2>
     <form method="post">
-        <div>
+        <div class="mb-2">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" asp-for="UserRegisterDTO.Name" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="lastname">Lastname:</label>
             <input type="text" id="lastname" name="lastname" asp-for="UserRegisterDTO.Lastname" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="address">Address:</label>
             <input type="text" id="address" name="address" asp-for="UserRegisterDTO.Address">
         </div>
-        <div>
+        <div class="mb-2">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" asp-for="UserRegisterDTO.Email" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" asp-for="UserRegisterDTO.Username" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" asp-for="UserRegisterDTO.Password" required>
         </div>
-        <div>
+        <div class="mb-2">
             <label for="confirmpassword">Confirm Password:</label>
             <input type="password" id="confirmpassword" name="confirmpassword" asp-for="UserRegisterDTO.ConfirmPassword" required>
         </div>
-        <div>
+        <div class="mb-4">
             <button type="submit">Register</button>
         </div>
+
+        @if (Model.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert" style="margin-right: 750px;">
+                <h7>@Model.ErrorMessage</h7>
+            </div>
+        }
     </form>
 </div>
 

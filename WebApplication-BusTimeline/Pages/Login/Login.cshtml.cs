@@ -1,4 +1,4 @@
-using FluentAssertions.Common;
+﻿using FluentAssertions.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -17,23 +17,24 @@ namespace WebApplication_BusTimeline.Pages.Login
         [BindProperty]
         public UserLoginDTO UserLoginDTO { get; set; }
 
+       
+        public string? ErrorMessage { get; set; }
+        //[BindProperty]
+        //public string? Error {  get; set; }
+
         public DataContext _context; 
         private readonly ILogger<LoginModel> _logger;
 
-        public string error;
         public LoginModel(DataContext context, ILogger<LoginModel> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-       
-
-        public void OnGet()
-        {
-
+        public void OnGet() {
+            
+            
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if(ModelState.IsValid == false)
@@ -45,8 +46,8 @@ namespace WebApplication_BusTimeline.Pages.Login
 
             if(_user == null)
             {
-                error = "Invalid login attempt";
-                return RedirectToPage("/Login/Login", new { error });
+                ErrorMessage = "Pogrešno korisničko ime ili šifra, pokušajte ponovo!";
+                
             }
             else
             {
