@@ -845,7 +845,7 @@ app.MapGet("/User/ById:{Id}", async (DataContext context, int Id) =>
 
 });
 
-app.MapGet("/User/By Username:{Username}", async (DataContext context, string Username) =>
+app.MapGet("/User/ByUsername:{Username}", async (DataContext context, string Username) =>
 {
     var _user = await context.users.FirstOrDefaultAsync(u => u.username == Username);
 

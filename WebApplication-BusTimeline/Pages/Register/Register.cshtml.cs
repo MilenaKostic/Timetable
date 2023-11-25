@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Shared.DTO;
 using Shared.DTO.User;
 using WebAPI.Data;
 using WebAPI.Models;
@@ -13,18 +15,15 @@ namespace WebApplication_BusTimeline.Pages
      
         [BindProperty]
         public UserRegisterDTO UserRegisterDTO { get; set; }
+        public string? ErrorMessage { get; set; }
 
         private readonly DataContext _context;
         private readonly ILogger<RegisterModel> _logger;
-
-        public string? ErrorMessage { get; set; }
-        public RegisterModel(DataContext context,  ILogger<RegisterModel> logger)
+        public RegisterModel(DataContext context, ILogger<RegisterModel> logger)
         {
             _context = context;
-            _logger = logger; 
+            _logger = logger;
         }
-
-
 
         public void OnGet()
         {
@@ -37,43 +36,54 @@ namespace WebApplication_BusTimeline.Pages
             {
                 return Page();
             }
-
-            var _userExist = await _context.users.FirstOrDefaultAsync(u => u.username.Equals(UserRegisterDTO.Username));
-
-            if (_userExist != null)
+            using (var httpClient = new HttpClient())
             {
-                ErrorMessage = "Već postoji korisnik sa ovim korisničkim imenom, pokušajte ponovo!"; 
-                
-            }
-            else
-            {
-                if (UserRegisterDTO.Password.Equals(UserRegisterDTO.ConfirmPassword))
+                try
                 {
-                    var _user = new User()
+                    using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/User/ByUsername:{UserRegisterDTO.Name}"))
                     {
-                        name = UserRegisterDTO.Name,
-                        lastname = UserRegisterDTO.Lastname,
-                        address = UserRegisterDTO.Address,
-                        email = UserRegisterDTO.Email,
-                        username = UserRegisterDTO.Username,
-                        password = UserRegisterDTO.Password   //DODATI HASH!
-                    };               
+                        string apiResponse = await response.Content.ReadAsStringAsync();                  
+                        var _user = (JsonConvert.DeserializeObject<UserRegisterDTO>(apiResponse));
 
-                    _context.users.Add(_user);
-                    await _context.SaveChangesAsync();
-                    return RedirectToPage("../Login/Login");
+                        if(_user != null)
+                        {
+                            ErrorMessage = "Već postoji korisnik sa ovim korisničkim imenom, pokušajte ponovo!";
+                            return Page();
+                        }                       
+                        else
+                        {
+                            if (UserRegisterDTO.Password.Equals(UserRegisterDTO.ConfirmPassword))
+                            {
+                                var _userNew = new User()
+                                {
+                                    name = UserRegisterDTO.Name,
+                                    lastname = UserRegisterDTO.Lastname,
+                                    address = UserRegisterDTO.Address,
+                                    email = UserRegisterDTO.Email,
+                                    username = UserRegisterDTO.Username,
+                                    password = UserRegisterDTO.Password   //DODATI HASH!
+                                };
 
+                                _context.users.Add(_userNew);
+                                await _context.SaveChangesAsync();
+                                return RedirectToPage("../Login/Login");
+
+                            }
+                            else
+                            {
+                                ErrorMessage = "Šifre se ne podudaraju, pokušajte ponovo!";
+                                return Page();
+                            }
+                        }
+
+                    }
                 }
-                else
+                catch (Exception exp)
                 {
-                    ErrorMessage = "Šifre se ne podudaraju, pokušajte ponovo!";
+                    ErrorMessage = "Došlo je do greške, pokušajte ponovo!";
+                    return Page();
                 }
-               
-
             }
-
-            return Page();
-
         }
     }
 }

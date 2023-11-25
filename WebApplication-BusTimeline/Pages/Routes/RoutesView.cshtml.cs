@@ -24,7 +24,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					{
 						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Stop/ByRouteBelong:{routeName}"))
 						{
-							string apiResponse = await response.Content.ReadAsStringAsync();						
+							string apiResponse = await response.Content.ReadAsStringAsync();
+
 							try
 							{
 								var _stops = JsonConvert.DeserializeObject<List<StopDTO>>(apiResponse);

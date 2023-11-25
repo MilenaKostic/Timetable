@@ -31,7 +31,6 @@
 
         <script>          
 
-           @*  var coordinates = Array.from(@Html.Raw(Json.Serialize(Model.LstStops.Select(l => new double[] { l.Lat, l.Lon })))); *@
              @foreach (var l in Model.LstStops)
             {
                 coordinates.Add(new (@l.Lat,@l.Lon));

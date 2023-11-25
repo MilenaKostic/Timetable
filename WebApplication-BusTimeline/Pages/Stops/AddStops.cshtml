@@ -15,4 +15,17 @@
 		maxZoom: 19,
 	}).addTo(map);
 
+	map.on('click', function (e) {
+		alert("Nova stanica ima koordinate:\n  Lat: " + e.latlng.lat + ",\n Lon: " + e.latlng.lng);
+		var lat = e.latlng.lat; 
+	});
+
+	$.ajax({
+		url: '@Url.Page("https://localhost:7292/Stops/AddStops?lat={lat}", "OnGet")',
+		type: 'GET',
+		data: { lat: lat }
+
+	});
+
 </script>
+
