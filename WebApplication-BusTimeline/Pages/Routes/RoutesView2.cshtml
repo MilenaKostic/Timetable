@@ -1,0 +1,42 @@
+﻿@page
+@model WebApplication_BusTimeline.Pages.Routes.RoutesView2Model
+@{
+}
+
+<h4 class="mb-3">Sve rute u gradu</h4>
+@if (Model.Routes != null)
+{
+    <Table class="table">
+        <thead class="table-primary">
+        <th>Id</th>
+        <th>Naziv</th>
+        <th></th>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Routes)
+            {
+                <tr class="table-secondary">
+                    <td style="width:50px">@r.Id</td>
+                    <td style="width:250px">@r.Name</td>
+                    <td style="width:100px">
+
+                        <a href=@($"/Routes/RouteDetails?routeId={r.Id}")>
+                            <button >
+                                <img height="30px" width="30px" src="https://shorturl.at/mwEU8" alt="Info">
+                            </button>
+                        </a>
+
+
+
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </Table>
+}
+
+
+
+
+

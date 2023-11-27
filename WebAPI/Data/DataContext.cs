@@ -15,6 +15,7 @@ namespace WebAPI.Data
         public DbSet<StopTime> stopTimes { get; set; }
         public DbSet<Trip> trips { get; set; }
         public DbSet<User> users { get; set; }
+        public DbSet<RouteStop> routeStops { get; set; }
 
        
     }

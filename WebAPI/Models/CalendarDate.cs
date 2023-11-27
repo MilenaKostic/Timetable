@@ -3,7 +3,7 @@
     public class CalendarDate
     {
         public int Id { get; set; }
-        public int serviceId { get; set; }
-        public DateTime date { get; set; }
+        public int ServiceId { get; set; }
+        public DateTime Date { get; set; }
     }
 }

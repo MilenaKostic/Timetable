@@ -3,10 +3,10 @@
     public class Stop
     {
         public int Id { get; set; }
-        public string? stopName { get; set; }
-        public double stopLat {get; set;}
-        public double stopLon {get; set;}
-        public string routeBelong { get; set;}
+        public string? StopName { get; set; }
+        public double StopLat {get; set;}
+        public double StopLon {get; set;}
+        public ICollection<RouteStop> RouteStops { get; set; }
 
     }
 }

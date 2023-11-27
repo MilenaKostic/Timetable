@@ -56,12 +56,12 @@ namespace WebApplication_BusTimeline.Pages
                             {
                                 var _userNew = new User()
                                 {
-                                    name = UserRegisterDTO.Name,
-                                    lastname = UserRegisterDTO.Lastname,
-                                    address = UserRegisterDTO.Address,
-                                    email = UserRegisterDTO.Email,
-                                    username = UserRegisterDTO.Username,
-                                    password = UserRegisterDTO.Password   //DODATI HASH!
+                                    Name = UserRegisterDTO.Name,
+                                    Lastname = UserRegisterDTO.Lastname,
+                                    Address = UserRegisterDTO.Address,
+                                    Email = UserRegisterDTO.Email,
+                                    Username = UserRegisterDTO.Username,
+                                    Password = UserRegisterDTO.Password   //DODATI HASH!
                                 };
 
                                 _context.users.Add(_userNew);
