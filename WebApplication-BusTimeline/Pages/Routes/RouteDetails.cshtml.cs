@@ -11,6 +11,8 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using WebAPI.Models;
 using Azure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication_BusTimeline.Pages.Routes
 {
@@ -26,34 +28,39 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public Int32 LastRBr { get; set; }
 
 		public string? ErrorMessage { get; set; }
-		public async Task OnGetAsync(string routeId, string stanicaId, string lastRbr)
+
+		public List<SelectListItem> StanicaList { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string SelStanicaId { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string SelPozicijaId { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string TimeInterval { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string MetarDistance { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string RouteId { get; set; }
+
+		[BindProperty, DataType(DataType.Text)]
+		public string SelectRbr { get; set; }
+
+
+		public async Task OnGetAsync(string routeId, string StanicaRbr)
 		{
-			if (stanicaId != null)
+			if(StanicaRbr  == null)
 			{
-				try
-				{
-					RouteStopPostDTO newRouteStop = new RouteStopPostDTO()
-					{
-						RouteId = Convert.ToInt32(routeId),
-						Rbr = Convert.ToInt32(lastRbr) + 1,
-						StopId = Convert.ToInt32(stanicaId)
-					};
-
-
-					var _httpClient = new HttpClient();
-					var result = await _httpClient.PostAsync("https://localhost:7151/RouteStop", new StringContent(JsonSerializer.Serialize(newRouteStop), Encoding.UTF8, "application/json"));
-
-
-				}
-				catch (Exception ex)
-				{
-					throw new Exception(ex.Message);
-				}
-
-
+				SelectRbr = "1";
 			}
-
-
+			else
+			{
+				SelectRbr = StanicaRbr;
+			}
+		
 			using (var httpClient = new HttpClient())
 			{
 				try
@@ -90,6 +97,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 						var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
 
 						Stops = _stops.ToList();
+						StanicaList = Stops.Select(row => new SelectListItem() { Value = row.Id.ToString(), Text = row.Name }).ToList(); 
 
 					}
 				}
@@ -156,7 +164,157 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 
 			}
-		}
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ById:{routeId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+
+                        try
+                        {
+                            Route = JsonConvert.DeserializeObject<RouteDTO>(apiResponse);
+
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
+
+                        Stops = _stops.ToList();
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{routeId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
+
+                        LastRBr = RouteStops.Max(x => x.Rbr);
+                    }
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+        }
+
+		public async Task<IActionResult> OnPost()
+		{
+			try
+			{
+				RouteStopPostDTO newRouteStop = new RouteStopPostDTO()
+				{
+					RouteId = Convert.ToInt32(RouteId),
+					PositionId = Convert.ToInt32(SelPozicijaId),
+					StopId = Convert.ToInt32(SelStanicaId),
+					TimeInterval = Convert.ToInt32(TimeInterval),
+					MetarDistance = Convert.ToInt32(MetarDistance)
+				};
+
+				var _httpClient = new HttpClient();
+				var result = await _httpClient.PostAsync("https://localhost:7151/RouteStop", new StringContent(JsonSerializer.Serialize(newRouteStop), Encoding.UTF8, "application/json"));
+
+			}
+			catch(Exception e)
+			{
+				ErrorMessage = e.Message.ToString();
+			}
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ById:{RouteId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+
+                        try
+                        {
+                            Route = JsonConvert.DeserializeObject<RouteDTO>(apiResponse);
+
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
+
+                        Stops = _stops.ToList();
+						StanicaList = Stops.Select(row => new SelectListItem() { Value = row.Id.ToString(), Text=row.Name }).ToList();
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{RouteId}"))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
+
+                        LastRBr = RouteStops.Max(x => x.Rbr);
+                    }
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
+                }
+            }
+			return Page();
+        }
 
 	}
 }

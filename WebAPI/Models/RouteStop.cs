@@ -12,5 +12,7 @@ namespace WebAPI.Models
 		[ForeignKey(nameof(Stop))]
 		public int StopId { get; set; }
 		public Stop Stop { get; set; }
+		public int? TimeInterval { get; set; }
+		public int? MetarDistance { get; set; }
 	}
 }

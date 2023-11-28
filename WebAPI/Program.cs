@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shared.DTO.Route;
 using Shared.DTO.User;
 using System;
+using Microsoft.Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -888,16 +889,96 @@ app.MapDelete("/User/{Id}", async (DataContext context, int Id) =>
 
 //ROUTESTOP
 app.MapPost("/RouteStop", async (DataContext context, RouteStopPostDTO item) =>
-{   
-    var _newRouteStop = new RouteStop()
-	{
-		RouteId = item.RouteId,
-		Rbr = item.Rbr,
-		StopId = item.StopId
-	};
+{
 
-	context.routeStops.Add(_newRouteStop);
-	await context.SaveChangesAsync();
+    var _newRouteStop = new RouteStop();
+    
+
+    switch (item.PositionId)
+    {
+        case 1:
+            {
+                var stopsOnRoute = await context.routeStops.Where(r => r.RouteId == item.RouteId).ToListAsync();
+
+                for(int i =0; i<stopsOnRoute?.Count; i++)
+                {
+                    stopsOnRoute[i].Rbr = stopsOnRoute[i].Rbr + 1;
+                }
+
+                _newRouteStop = new RouteStop()
+                {
+                    RouteId = item.RouteId,
+                    Rbr = 1,
+                    StopId = item.StopId,
+                    TimeInterval = item.TimeInterval,
+                    MetarDistance = item.MetarDistance
+                };
+
+                context.routeStops.Add(_newRouteStop);
+                break;
+            }
+        case 2:
+            {
+                //?????? 
+				var selectedStop = await context.routeStops.Where(r => r.RouteId == item.RouteId).FirstOrDefaultAsync();                
+
+                if(selectedStop != null)
+                {
+                    var stopsOnRoute = await context.routeStops.Where(r => r.RouteId == item.RouteId).ToListAsync();
+
+					var index = stopsOnRoute.FindIndex(r => r.Id == selectedStop.Id);
+
+                    for(int i= index; i< stopsOnRoute.Count; i++)
+                    {
+                        stopsOnRoute[i].Rbr ++; 
+                    }
+
+                    _newRouteStop = new RouteStop()
+                    {
+                        RouteId = item.RouteId,
+                        Rbr = index ,
+                        TimeInterval = item.TimeInterval,
+                        MetarDistance = item.MetarDistance
+
+                    };
+
+                    context.routeStops.Add(_newRouteStop);
+				}
+
+                else
+                {
+                    return Results.NotFound("Nije nadjena stanica na ruti");
+                }
+			                
+                break;
+            }
+        case 3:
+            {
+                context.routeStops.Add(_newRouteStop);
+                break;
+            }
+
+        case 4:
+            {
+                var lastRbr = await context.routeStops.Where(x => x.RouteId == item.RouteId).OrderBy(x => x.Rbr).LastOrDefaultAsync();
+                var newRbr = (lastRbr?.Rbr ?? 0) + 1;
+
+                _newRouteStop = new RouteStop()
+                {
+                    RouteId = item.RouteId,
+                    Rbr = newRbr,
+                    StopId = item.StopId,
+                    TimeInterval = item.TimeInterval,
+                    MetarDistance = item.MetarDistance
+                };
+
+                context.routeStops.Add(_newRouteStop);
+                break;
+            }
+    }
+
+   
+    await context.SaveChangesAsync();
 
 	var newRouteStop = await context.routeStops
 		.Include(r => r.Route)
@@ -953,6 +1034,7 @@ app.MapGet("/RouteStop/ById:{RouteId}", async (DataContext context, int RouteId)
         .routeStops
         .Include(s => s.Stop)
         .Where(x => x.RouteId == RouteId)
+        .OrderBy(r => r.Rbr)
         .ToListAsync();
 
     var routeStopDTO = routeStopEntity.Select(row => new RouteStopListDTO()
@@ -976,7 +1058,7 @@ app.MapDelete("/RouteStop/{Id}", async (DataContext context, int Id) =>
 {
     var routestopItem = await context.routeStops.FindAsync(Id);
 	if (routestopItem == null)
-		return Results.NotFound("User not found");
+		return Results.NotFound("Route stop not found");
 
 	context.routeStops.Remove(routestopItem);
 	await context.SaveChangesAsync();
