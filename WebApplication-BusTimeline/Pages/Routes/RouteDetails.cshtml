@@ -71,7 +71,7 @@
 		<div class="row" >
 			<div class="row-col-4">
 				<div class="mb-3">
-		@if (Model.RouteStops != null)
+		@if (Model?.RouteStops != null)
 		{
 			<table class="table">
 				<thead class="table-primary">
@@ -141,10 +141,10 @@
 
 		var coordinates = [];
 
-		@foreach (var r in Model?.RouteStops.OrderBy(x => x.Rbr))
-		{
+			@foreach (var r in Model?.RouteStops?.OrderBy(x => x.Rbr))
+			{
 			@:coordinates.push({ lat: "@r.Stop.Lat.ToString().Replace(',','.')", lon: "@r.Stop.Lon.ToString().Replace(',','.')" });
-		}
+			}
 
 		const polyline = new L.polyline(
 			[coordinates],

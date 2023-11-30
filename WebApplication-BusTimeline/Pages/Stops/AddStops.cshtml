@@ -7,25 +7,63 @@
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 
-<div id="map" style="height: 600px;"></div>
 
-<script>
-	var map = L.map('map').setView([44.968190, 19.608141], 16);
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-	}).addTo(map);
 
-	map.on('click', function (e) {
-		alert("Nova stanica ima koordinate:\n  Lat: " + e.latlng.lat + ",\n Lon: " + e.latlng.lng);
+
+
+<form method="post" onsubmit="OnPostNewStop()">
+<div style="float: right; width: 80%">
+		<div id="map" style="height: 600px;"></div>
+</div>
+
+<div style="float: left; width:20%">
+	<h5>Unesite ime stanice:</h5>
+		<input type="text" id="stopName" name="stopName" required class="mb-2" />
+		@if(Model.ErrorMessage != null)
+		{
+
+			@if (Model.ErrorMessage.StartsWith("Izaberite") || Model.ErrorMessage.StartsWith("Već"))
+			{
+				<div class="alert alert-danger" role="alert" style="margin-right: 40px;">
+					<h7>@Model.ErrorMessage</h7>
+				</div>
+			}
+			else 
+			{
+				<div class=" alert alert-success" role="alert" style="margin-right: 40px;">
+					<h7>@Model.ErrorMessage</h7>
+				</div>
+			}
+
+		}
+		
+	</div>
+	
+
+	<script>
+		var map = L.map('map').setView([44.968190, 19.608141], 16);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		}).addTo(map);
+
+		
+		map.on('click', function (e) {
+			document.getElementById("lat").value = e.latlng.lat;
+			document.getElementById("lon").value = e.latlng.lng;
+
+		});
+
 		var lat = e.latlng.lat; 
-	});
 
-	$.ajax({
-		url: '@Url.Page("https://localhost:7292/Stops/AddStops?lat={lat}", "OnGet")',
-		type: 'GET',
-		data: { lat: lat }
+	</script>
+	
 
-	});
 
-</script>
+	<input type="hidden" asp-for="lat" id="lat"/>
+	<input type="hidden" asp-for="lon" id="lon"/>
+	<div style="margin-left:40px" >
+		<button type="submit">Dodaj stanicu</button>
+	</div>
+	
+</form>
 
