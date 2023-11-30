@@ -20,15 +20,10 @@ namespace WebApplication_BusTimeline.Pages.Routes
 	{
 
 		public RouteDTO Route { get; set; }
-
 		public List<StopGetBasicDTO> Stops { get; set; }
-
 		public List<RouteStopListDTO> RouteStops { get; set; }
-
 		public Int32 LastRBr { get; set; }
-
 		public string? ErrorMessage { get; set; }
-
 		public List<SelectListItem> StanicaList { get; set; }
 
 		[BindProperty, DataType(DataType.Text)]
@@ -48,7 +43,6 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 		[BindProperty, DataType(DataType.Text)]
 		public string SelectRbr { get; set; }
-
 
 		public async Task OnGetAsync(string routeId, string StanicaRbr)
 		{
@@ -125,7 +119,6 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				}
 			}
 		}
-
 
 		public async Task OnPostDeleteRouteStopAsync(int routeId, int stanicaId, int RBr)
 		{
@@ -238,7 +231,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					PositionId = Convert.ToInt32(SelPozicijaId),
 					StopId = Convert.ToInt32(SelStanicaId),
 					TimeInterval = Convert.ToInt32(TimeInterval),
-					MetarDistance = Convert.ToInt32(MetarDistance)
+					MetarDistance = Convert.ToInt32(MetarDistance),
+					SelectRbr = String.IsNullOrEmpty(SelectRbr) ? (new int?()) : Convert.ToInt32(SelectRbr)
 				};
 
 				var _httpClient = new HttpClient();

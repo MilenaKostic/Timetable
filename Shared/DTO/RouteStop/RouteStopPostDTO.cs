@@ -11,5 +11,6 @@ namespace Shared.DTO
 		public int StopId { get; set; }
 		public int? TimeInterval { get; set; }
 		public int? MetarDistance { get; set; }
+		public int? SelectRbr { get; set; }
 	}
 }

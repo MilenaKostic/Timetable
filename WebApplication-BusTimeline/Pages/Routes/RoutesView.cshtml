@@ -38,60 +38,31 @@
 
 <div id="map" style="height: 600px;"></div> 
 
-@if(Model.routeName != null)
-{
-
-    @if (Model.RouteStops != null)
-    {       
-
-        List<(double Lat, double Lon)> coordinates = new List<(double Lat, double Lon)>(); 
-
-            @foreach (var r in Model.RouteStops.OrderBy(x => x.Rbr))
-            {
-                @foreach(var s in Model.Stops)
-                {                  
-                    @if(r.Stop.Id == s.Id)
-                    {
-                        coordinates.Add(new (r.Stop.Lat, r.Stop.Lon));
-                    }
-                }          
-            }
-
-
-        @if(coordinates.Count > 2)
-        {
-           <script>
-               
-            var polygon = L.polygon(coordinates, {
-                        color: 'red',
-                        weight: 10,
-            }).addTo(map)
-
-            map.fitBounds(polygon.getBounds());               
-
-            </script>
-        }
-        
-
-        
-        @foreach (var a in coordinates)
-        {
-            <h3>@a.Lat</h3>
-            <h3>@a.Lon</h3>
-        }
-       
-    }
- 
-}
 
 <script>
-    var map = L.map('map').setView([44.968190, 19.608141], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
+		var map = L.map('map').setView([44.968190, 19.608141], 13);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		}).addTo(map);
+
+		var coordinates = [];
+
+	if (Model) {
+
+	
+	@foreach (var r in Model?.RouteStops.OrderBy(x => x.Rbr))
+	{
+		@:coordinates.push({ lat: "@r.Stop.Lat.ToString().Replace(',','.')", lon: "@r.Stop.Lon.ToString().Replace(',','.')" });
+	}
+
+			const polyline = new L.polyline(
+		[coordinates],
+		{
+			color: '#22e631',
+			weight: 3,
+			opacity: 0.5,
+			smoothFactor: 1,
+		}).addTo(map);
+	}
 
 </script>
-
-
-
-

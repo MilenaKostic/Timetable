@@ -2,12 +2,18 @@
 @model WebApplication_BusTimeline.Pages.Routes.RouteDetailsModel
 @{
 }
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+</head>
+
+<div style="float: left; width: 40%">
 <div class="row">
-	<div class="col-md-7">
+	
 		@if (Model.Route != null)
 		{
-			<div class="mb-2" style="width:600px">
+			<div class="mb-2" style="width:375px">
 				<div class="row">
 					<h4><span>Dodajte novu stanicu na rutu: </span> <span class="fw-bold">@Model.Route.Name</span></h4>
 				</div>
@@ -20,44 +26,44 @@
 			Stanica:
 
 					<select id="SelStanicaId" asp-for="SelStanicaId"  required asp-items="@Model.StanicaList" style="margin-left:100px;">
-				<option value="" disabled selected>Izaberite stanicu</option>
+					<option value="" disabled selected>Izaberite stanicu</option>
 
-			</select>
-		</div>
+					</select>
+			</div>
 
 			<div class="mb-1">
 			Pozicija stanice:
 
-					<select id="SelPozicijaId" asp-for="SelPozicijaId" required style="margin-left:45px;">
+				<select id="SelPozicijaId" asp-for="SelPozicijaId" required style="margin-left:45px;">
 				<option value="1">Prva stanica</option>
 				<option value="2">Pre izabrane stanice</option>
 				<option value="3">Posle izabrane stanice</option>
 				<option value="4">Poslednja stanica</option>
-		</select  >
+				</select  >
 			</div>
 
 			<div class="mb-1">
 					Minuta od prethodne: <input type="number" required min="0" asp-for="TimeInterval" />
-		</div>
+			</div>
 			<div class="mb-2">
 					Metara od prethodne: <input type="number" required min="0" asp-for="MetarDistance" />
-		</div>
+			</div>
 
 				<div style="text-align: center;" class="col-md-7" >
 					<div class="mb-3">
 						<button type="submit" value="Dodaj" style="text-align:center; background-color:#cfe2ff ">Dodaj</button>
 					</div>
-				
-		</div>
+				</div>
 			
 
 		<input type="hidden" id="RouteId" asp-for="RouteId" value="@Model?.Route?.Id"/>
+		<input type="hidden" id="SelectRbr" asp-for="SelectRbr" value="@Model?.SelectRbr"/>
 
 	</form>
 
 </div>
 	
-	<div class="col-md-7">
+	<div class="col-md-10">
 		<div class="mb-3">
 			<h4>Stanice na liniji:</h4>
 		</div>
@@ -110,4 +116,50 @@
 			</div>
 		</div>
 
-		</div>
+	</div>
+
+	</div>
+
+	<a href="../Routes/RoutesView2">Nazad</a>
+</div>
+
+
+
+<div style="float: right; width: 60%">
+
+
+<div class="row">
+	
+
+	<div id="map" style="height: 600px; width=100%"></div>
+
+	<script>
+		var map = L.map('map').setView([44.968190, 19.608141], 13);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		}).addTo(map);
+
+		var coordinates = [];
+
+		@foreach (var r in Model?.RouteStops.OrderBy(x => x.Rbr))
+		{
+			@:coordinates.push({ lat: "@r.Stop.Lat.ToString().Replace(',','.')", lon: "@r.Stop.Lon.ToString().Replace(',','.')" });
+		}
+
+		const polyline = new L.polyline(
+			[coordinates],
+			{
+				color: '#22e631',
+				weight: 3,
+				opacity: 0.5,
+				smoothFactor: 1,
+			}).addTo(map);
+
+
+	</script>
+
+	</div>
+
+</div>
+			@* //color='@Model.Route.Color', *@
+
