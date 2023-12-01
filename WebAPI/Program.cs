@@ -5,7 +5,6 @@ using WebAPI.Models;
 using Shared.DTO;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shared.DTO.Route;
-using Shared.DTO.User;
 using System;
 using Microsoft.Identity.Client;
 using System.Reflection.Metadata.Ecma335;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Shared.DTO.User
+namespace Shared.DTO
 {
     public class UserLoginDTO
     {
