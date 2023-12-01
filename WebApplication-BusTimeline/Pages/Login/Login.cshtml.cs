@@ -24,25 +24,30 @@ namespace WebApplication_BusTimeline.Pages.Login
 
         public async Task OnGetAsync()
         {
-
         }
 
-        public async Task<IActionResult> OnPostAsync(string Username, string Password)
+        public async Task<IActionResult> OnGetAsyncLogout()
         {
-			if (Username != null && Password != null)
+			HttpContext.Session.Remove("username");
+			return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(UserLoginDTO userLoginDTO)
+        {
+			if (userLoginDTO.Username != null && userLoginDTO.Password != null)
 			{
 				using (var httpClient = new HttpClient())
 				{
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/User/ByUsername:{Username}"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/User/ByUsername:{userLoginDTO.Username}"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							var _user = (JsonConvert.DeserializeObject<UserLoginDTO>(apiResponse));
 
-							if (_user.Password == Password)
+							if (_user.Password == userLoginDTO.Password)
 							{
-								
+								HttpContext.Session.SetString("username", UserLoginDTO.Username);
 								return RedirectToPage("../Index", new { UserLoginDTO.Username });
 							}
 							else

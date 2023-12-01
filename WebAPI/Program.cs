@@ -519,7 +519,6 @@ app.MapDelete("/Trip/{Id}", async (DataContext context, int Id) =>
 });
 
 //STOP
-
 //async Task<List<Stop>> GetStops(DataContext context) => await context.stops.ToListAsync();
 
 app.MapPost("/Stop", async (DataContext context, StopPostDTO item) =>

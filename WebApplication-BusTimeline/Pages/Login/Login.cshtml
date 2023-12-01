@@ -1,22 +1,25 @@
 ﻿@page
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model WebApplication_BusTimeline.Pages.Login.LoginModel
 @{
     ViewData["Title"] = "Login";
 }
 
-<div class="mb-4">
+<div class="mb-4" >
+    <div class="container border">
+ 
     <h2>Login</h2>
     <form method="post">
         <div class="mb-2">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" asp-for="Username" required>
+            <input type="text" id="username" name="username" asp-for="@Model.UserLoginDTO.Username" required>
         </div>
         <div class="mb-2">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" asp-for="Password" required>
+            <input type="password" id="password" name="password" asp-for="@Model.UserLoginDTO.Password" required>
         </div>
         <div class="mb-4">
-            <button type="submit">Login</button>
+            <button type="submit" >Login</button>
         </div>  
         @if(Model.ErrorMessage != null)
         {
@@ -25,6 +28,7 @@
             </div>
         }
     </form>
+    </div>
 </div>
 
 <a href="../Register/Register">Novi u našoj aplikaciji, registrujte se!</a>
