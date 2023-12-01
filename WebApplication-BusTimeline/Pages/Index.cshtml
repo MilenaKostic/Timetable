@@ -1,11 +1,16 @@
 ﻿@page
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
+
 
 <div class="text-center">
-    <h1 class="display-4">Dobrodošli @Model.username </h1> 
+    <h1 class="display-4">Dobrodošli @Model.Username </h1> 
+
+    @if(Model.Username != null)
+    {
+        <a asp-page="Index" asp-page-handler="Logout">Logout</a>
+    }
+    
     
     @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>

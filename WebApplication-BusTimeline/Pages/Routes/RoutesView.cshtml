@@ -15,9 +15,13 @@
     <label for="routeSelector">Prikaži liniju:</label>
     <select id="routeSelector" name="routeName" onchange="this.form.submit()">
         <option value="" disabled selected>Izaberite rutu</option>
-        <option value="Kamenjar-Crvena česma">Kamenjar-Crvena česma</option>
+			@foreach(var s in Model?.Routes)
+			{
+				<option value="@s.Name" > @s.Name</option>
+			}
+			@* <option value="Kamenjar-Crvena česma">Kamenjar-Crvena česma</option>
         <option value="Laćarak-Kuper-Mala Bosna">Laćarak-Kuper-Mala Bosna</option>
-        <option value="Laćarak-Industrijska zona-Groblje">Laćarak-Industrijska zona-Groblje</option>
+        <option value="Laćarak-Industrijska zona-Groblje">Laćarak-Industrijska zona-Groblje</option> *@
     </select>
     <br/>
 </form>
@@ -67,3 +71,4 @@
 		}).addTo(map);
 	}
  *@
+<a href="../Index">Home</a>

@@ -17,6 +17,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public int RouteId { get; set; }
 		public List<StopDTO> Stops { get; set; }
 
+		public List<RouteGetBasicDTO> Routes { get; set; }
+
         public async Task OnGetAsync(string routeName)
 		{
 			if(routeName != null)
@@ -44,6 +46,29 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					{
 						ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
 					}
+					try
+					{
+						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+						{
+							string apiResponse = await response.Content.ReadAsStringAsync();
+							try
+							{
+								var _routes = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
+								Routes = _routes.ToList(); 
+							}
+							catch (JsonSerializationException)
+							{
+								ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
+							}
+						}
+
+					}
+					catch (Exception ex)
+					{
+						ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
+					}
+
+
 					try
 					{
 						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{RouteId}"))
@@ -93,7 +118,31 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			}
 			else
 			{
-                ErrorMessage = "Izaberite željenu rutu";
+				using (var httpClient = new HttpClient())
+				{
+					try
+					{
+						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+						{
+							string apiResponse = await response.Content.ReadAsStringAsync();
+							try
+							{
+								var _route = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
+								Routes = _route.ToList();
+							}
+							catch (JsonSerializationException)
+							{
+								ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+							}
+						}
+
+					}
+					catch (Exception ex)
+					{
+						ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
+					}
+					ErrorMessage = "Izaberite željenu rutu";
+				}
             }
 
 		}
