@@ -1,0 +1,54 @@
+﻿@page
+@model WebApplication_BusTimeline.Pages.Routes.AddRouteModel
+@{
+}
+
+<div div style="float: left; width: 50%">
+	<h4>Dodaj rutu</h4>
+	 <form method="post">
+        <div class="mb-2">
+            <label for="routeName">Naziv rute:</label>
+			<input type="text" id="Name" name="Name" asp-for="routePostDTO.Name" required style=" margin-left:20px">
+        </div>
+		<div class="mb-2">
+            <label for="routeColor">Boja rute:</label>
+			<input type="color" id="Color" name="Color" asp-for="routePostDTO.Color" required style=" margin-left:28px" />
+        </div>
+		<div style="margin-left:50px" class="mb-3">
+            <button type="submit">Dodaj rutu</button>
+        </div>
+       </form>
+
+	
+	@if (Model.ErrorMessage != null)
+	{
+		<div class="alert alert-danger" role="alert" style="margin-right: 150px;">
+			<h7>@Model.ErrorMessage</h7>
+		</div>
+	}
+	
+</div>
+
+<div div style="float: right; width: 50%">
+    <h4>Spisak postojećih ruta</h4>
+	<table class="table">
+		<thead class="table-primary">
+		<th>Id</th>
+		<th>Naziv</th>
+		</thead>
+
+		@foreach (var s in Model?.Routes)
+		{
+			<tr class="table-secondary">
+
+				<td>@s.Id</td>
+				<td>@s.Name</td>
+
+			</tr>
+
+		}
+
+	</table>
+</div>
+
+<a href="../Index">Home</a>
