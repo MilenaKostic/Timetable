@@ -8,8 +8,8 @@ using System.Text.Json;
 using System.Text;
 using System.Net.WebSockets;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using WebAPI.Models;
-using Azure;
+//using WebAPI.Models;
+//using Azure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
@@ -59,7 +59,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ById:{routeId}"))
+					using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/{routeId}"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -85,7 +85,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+					using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 						var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
@@ -105,7 +105,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{routeId}"))
+					using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/RouteStop/{routeId}"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 						RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
@@ -126,7 +126,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{routeId}"))
+					using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/RouteStop/{routeId}"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 						RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
@@ -137,22 +137,19 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					{
 						if(s.Id == stanicaId && s.Rbr == RBr)
 						{
-							using (HttpResponseMessage response2 = await httpClient.DeleteAsync($"https://localhost:7151/RouteStop/{s.Id}"))
+							using (HttpResponseMessage response2 = await httpClient.DeleteAsync($"http://localhost:5099/api/RouteStop?id={s.Id}"))
 							{
                                 string apiResponse = await response2.Content.ReadAsStringAsync();
-
-                                //return RedirectToPage($"Routes/RouteDetails?routeId={routeId}");
+                               
                             }
                             
                         }
 					}
-                    //return RedirectToPage($"Routes/RouteDetails?routeId={routeId}");
 
                 }
 				catch (Exception e)
 				{
 					ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
-                    //return RedirectToPage($"Routes/RouteDetails?routeId={routeId}");
                 }
 
 
@@ -161,7 +158,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ById:{routeId}"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/{routeId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -187,7 +184,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
@@ -206,7 +203,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{routeId}"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/RouteStop/{routeId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
@@ -248,7 +245,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ById:{RouteId}"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/{RouteId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -274,7 +271,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
@@ -294,7 +291,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{RouteId}"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/{RouteId}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         RouteStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();

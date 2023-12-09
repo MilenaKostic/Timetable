@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared.DTO;
+using Shared.DTO; 
 using System.Text;
-using WebAPI.Data;
-using WebAPI.Models;
+//using WebAPI.Data;
+//using WebAPI.Models;
 using WebApplication_BusTimeline.Pages.Login;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -38,7 +38,7 @@ namespace WebApplication_BusTimeline.Pages
             {
                 try
                 {
-                    using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/User/ByUsername:{userRegisterDTO.Username}"))
+                    using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/User/{userRegisterDTO.Username}"))
                     {
                         if(response.IsSuccessStatusCode)
                         {
@@ -54,7 +54,7 @@ namespace WebApplication_BusTimeline.Pages
 
                                 try
                                 {
-                                    using (HttpResponseMessage response2 = await httpClient.GetAsync($"https://localhost:7151/User/AllUsers"))
+                                    using (HttpResponseMessage response2 = await httpClient.GetAsync($"http://localhost:5099/api/User"))
                                     {
                                         string apiResponse = await response2.Content.ReadAsStringAsync();
 

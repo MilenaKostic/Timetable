@@ -1,4 +1,4 @@
-using Azure;
+//using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -27,7 +27,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				{
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ByName:{routeName}"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/RouteByName?name={routeName}"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							try
@@ -48,7 +48,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					}
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							try
@@ -71,7 +71,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/RouteStop/ById:{RouteId}"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/RouteStop/{RouteId}"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							try
@@ -93,7 +93,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+						using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							try
@@ -122,7 +122,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				{
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							try

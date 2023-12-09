@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.DTO;
 using System.Text.Json.Serialization;
-using WebAPI.Data;
-using WebAPI.Models;
+//using WebAPI.Data;
+//using WebAPI.Models;
 
 namespace WebApplication_BusTimeline.Pages.Login
 {
@@ -40,7 +40,7 @@ namespace WebApplication_BusTimeline.Pages.Login
 				{
 					try
 					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/User/ByUsername:{userLoginDTO.Username}"))
+						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/User/{userLoginDTO.Username}"))
 						{
 							string apiResponse = await response.Content.ReadAsStringAsync();
 							var _user = (JsonConvert.DeserializeObject<UserLoginDTO>(apiResponse));

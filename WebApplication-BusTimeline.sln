@@ -5,8 +5,6 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication-BusTimeline", "WebApplication-BusTimeline\WebApplication-BusTimeline.csproj", "{B576054D-13EC-41E1-85D0-79F98C689E07}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{A56EAF96-CBF9-4846-81BE-86FA2187A690}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{2E1BD115-C7D4-4D63-A3B9-6414562674DA}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{B576054D-13EC-41E1-85D0-79F98C689E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B576054D-13EC-41E1-85D0-79F98C689E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B576054D-13EC-41E1-85D0-79F98C689E07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A56EAF96-CBF9-4846-81BE-86FA2187A690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A56EAF96-CBF9-4846-81BE-86FA2187A690}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A56EAF96-CBF9-4846-81BE-86FA2187A690}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A56EAF96-CBF9-4846-81BE-86FA2187A690}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +26,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Shared\Shared.projitems*{2e1bd115-c7d4-4d63-a3b9-6414562674da}*SharedItemsImports = 13
-		Shared\Shared.projitems*{a56eaf96-cbf9-4846-81be-86fa2187a690}*SharedItemsImports = 5
+		Shared\Shared.projitems*{b576054d-13ec-41e1-85d0-79f98c689e07}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

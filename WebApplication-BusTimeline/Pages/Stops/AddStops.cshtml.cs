@@ -6,8 +6,8 @@ using Shared.DTO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using WebAPI.Data;
-using WebAPI.Models;
+//using WebAPI.Data;
+//using WebAPI.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApplication_BusTimeline.Pages.Stops
@@ -33,7 +33,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+					using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 						var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();

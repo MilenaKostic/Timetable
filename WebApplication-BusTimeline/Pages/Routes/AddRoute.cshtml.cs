@@ -22,7 +22,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+					using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
 					{
 						string apiResponse = await response.Content.ReadAsStringAsync();
 						try
@@ -54,7 +54,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				try
 				{
-					using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/ByName:{routePostDTO.Name}"))
+					using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/RouteByName?name={routePostDTO.Name}"))
 					{
 						if (response.IsSuccessStatusCode)
 						{
@@ -64,7 +64,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 							try
 							{
-								using (HttpResponseMessage response2 = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+								using (HttpResponseMessage response2 = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
 								{
 									string apiResponse2 = await response2.Content.ReadAsStringAsync();
 									try
@@ -105,7 +105,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 							try
 							{
-								using (HttpResponseMessage response3 = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+								using (HttpResponseMessage response3 = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
 								{
 									string apiResponse = await response3.Content.ReadAsStringAsync();
 									try

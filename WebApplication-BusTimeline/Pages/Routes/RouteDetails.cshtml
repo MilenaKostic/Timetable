@@ -71,8 +71,7 @@
 		<div class="row" >
 			<div class="row-col-4">
 				<div class="mb-3">
-		@if (Model?.RouteStops != null)
-		{
+		
 			<table class="table">
 				<thead class="table-primary">
 					<tr>
@@ -84,6 +83,7 @@
 					</tr>
 				</thead>
 				<tbody>
+					
 					@foreach (var s in Model.RouteStops)
 					{
 										
@@ -91,8 +91,8 @@
 							<td style="text-align:center">
 								<a href=@($"https://localhost:7292/Routes/RouteDetails?routeId={Model.Route.Id}&StanicaRbr={s.Rbr}")>
 									<button class="btn btn-primary" style="background-color:white; width:40px; height:40px; display: flex; align-items: center; justify-content: center;">
-										<svg fill="#000000" width="115px" height="115px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M20 2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-6.933 12.481-3.274-3.274 1.414-1.414 1.726 1.726 4.299-5.159 1.537 1.281-5.702 6.84z"></path><path d="M4 22h11v-2H4V8H2v12c0 1.103.897 2 2 2z"></path></g></svg>
-									</button>
+													<svg width="104px" height="104px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Warning / Info"> <path id="Vector" d="M12 11V16M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21ZM12.0498 8V8.1L11.9502 8.1002V8H12.0498Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg>
+												</button>
 								</a>
 							</td>
 							<td>
@@ -111,7 +111,7 @@
 				</tbody>
 
 			</table>
-		}
+		
 				</div>
 			</div>
 		</div>

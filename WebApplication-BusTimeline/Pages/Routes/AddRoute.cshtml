@@ -36,17 +36,21 @@
 		<th>Id</th>
 		<th>Naziv</th>
 		</thead>
-
-		@foreach (var s in Model?.Routes)
+		@if(Model.Routes.Count != 0 )
 		{
-			<tr class="table-secondary">
+			@foreach (var s in Model?.Routes)
+			{
+				<tr class="table-secondary">
 
-				<td>@s.Id</td>
-				<td>@s.Name</td>
+					<td>@s.Id</td>
+					<td>@s.Name</td>
 
-			</tr>
+				</tr>
 
+			}
+			
 		}
+		
 
 	</table>
 </div>

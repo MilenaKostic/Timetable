@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Identity.Client;
+//using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Shared.DTO;
 
@@ -19,7 +19,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
             {
                 try
                 {
-                    using(HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7151/Stop/AllStops"))
+                    using(HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
@@ -48,7 +48,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
                 {
                     try
                     {
-                        using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Stop/ById:{StanicaId}"))
+                        using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Stop/{StanicaId}"))
                         {
                             string apiResponse = await response.Content.ReadAsStringAsync();
                             SelectedStop = JsonConvert.DeserializeObject<StopDTO>(apiResponse);

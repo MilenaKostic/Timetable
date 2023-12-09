@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Shared.DTO;
-using WebAPI.Models;
+//using WebAPI.Models;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
 public class RoutesView2Model : PageModel
@@ -18,7 +18,7 @@ public class RoutesView2Model : PageModel
         {
             try
             {
-                using (HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7151/Route/AllRoutes"))
+                using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -49,13 +49,13 @@ public class RoutesView2Model : PageModel
         {
             try
             {
-                using (HttpResponseMessage response = await httpClient.DeleteAsync($"https://localhost:7151/Route/{routeId}"))
+                using (HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5099/api/Route/{routeId}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
                     try
                     {
-                        using (HttpResponseMessage response2 = await httpClient.GetAsync("https://localhost:7151/Route/AllRoutes"))
+                        using (HttpResponseMessage response2 = await httpClient.GetAsync("http://localhost:5099/api/Route"))
                         {
                             string apiResponse2 = await response2.Content.ReadAsStringAsync();
                             var _routes = (JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse2)).ToList();
