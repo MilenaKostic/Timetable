@@ -108,8 +108,16 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				if(s.Id == stanicaId && s.Rbr == RBr)
 				{
-					//??  
-                }
+					try
+					{
+						 await _service.DeleteRouteStopById(s.Id);
+					}
+					catch (Exception e)
+					{
+						ErrorMessage = e.Message;
+					}
+
+				}
 			}
 
 
@@ -160,8 +168,16 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					SelectRbr = String.IsNullOrEmpty(SelectRbr) ? (new int?()) : Convert.ToInt32(SelectRbr)
 				};
 
-				var _httpClient = new HttpClient();
-				var result = await _httpClient.PostAsync("https://localhost:7151/RouteStop", new StringContent(JsonSerializer.Serialize(newRouteStop), Encoding.UTF8, "application/json"));
+				
+				try
+				{
+					await _service.CreateRouteStop(newRouteStop);
+					LastRBr = RouteStops.Max(x => x.Rbr);
+				}
+				catch (Exception e)
+				{
+					ErrorMessage = e.Message;
+				}
 
 			}
 			catch(Exception e)

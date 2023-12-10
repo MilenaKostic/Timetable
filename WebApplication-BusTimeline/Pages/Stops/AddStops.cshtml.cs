@@ -7,8 +7,6 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using WebApplication_BusTimeline.Service;
-//using WebAPI.Data;
-//using WebAPI.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApplication_BusTimeline.Pages.Stops
@@ -34,8 +32,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
 		}
 
 		public async Task OnPostAsync(double lat, double lon, string stopName)
-		{
-			
+		{			
 			try
 			{
 				stops = (await _service.GetAllBasicStop()).ToList();					
@@ -62,8 +59,7 @@ namespace WebApplication_BusTimeline.Pages.Stops
 						Lon = lon
 					};
 
-					var _httpClient = new HttpClient();
-					var result = await _httpClient.PostAsync("https://localhost:7151/Stop", new StringContent(JsonSerializer.Serialize(newStop), Encoding.UTF8, "application/json"));
+					var _resultNewStop = await _service.CreateStop(newStop);
 
 					ErrorMessage = "Uspešno dodata stanica";
 

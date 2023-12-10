@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-//using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Shared.DTO;
 using WebApplication_BusTimeline.Service;
@@ -43,26 +42,9 @@ namespace WebApplication_BusTimeline.Pages.Stops
 
             if(StanicaId != null)
             {
-                //using(var httpClient = new HttpClient())
-                //{
-                //    try
-                //    {
-                //        using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Stop/{StanicaId}"))
-                //        {
-                //            string apiResponse = await response.Content.ReadAsStringAsync();
-                //            SelectedStop = JsonConvert.DeserializeObject<StopDTO>(apiResponse);
-                //        }
-                //    }
-                //    catch(Exception e)
-                //    {
-                //        ErrorMessage = "Željena stanica je trenutno nedostupna, pokušajte kasnije";
-                //    }
-                //}
-
                 try
                 {
-                    
-                    //SelectedStop = await _service.GetStopById(StanicaId);
+                    SelectedStop = await _service.GetStopById(StanicaId.Value);
                 }
                 catch (Exception e)
                 {

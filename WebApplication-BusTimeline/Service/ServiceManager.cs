@@ -60,7 +60,7 @@ namespace WebApplication_BusTimeline.Service
 			}
 		}
 
-		public async Task<IEnumerable<StopDTO>> GetStopById(int id)
+		public async Task<StopDTO> GetStopById(int id)
 		{
 			try
 			{
@@ -73,7 +73,7 @@ namespace WebApplication_BusTimeline.Service
 				var response = await _httpClient.SendAsync(request);
 				response.EnsureSuccessStatusCode();
 
-				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<StopDTO>>(
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<StopDTO>(
 					(await response.Content.ReadAsStreamAsync()),
 					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
@@ -85,6 +85,31 @@ namespace WebApplication_BusTimeline.Service
 			}
 
 		}
+
+		public async Task<StopGetBasicDTO> CreateStop(StopPostDTO stop)
+		{
+			try
+			{
+
+				var request = new HttpRequestMessage(HttpMethod.Post, $"api/Stop");
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+
+				request.Content = JsonContent.Create(stop);
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<StopGetBasicDTO>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Nemoguce kreirati stanicu");
+			}
+		}
+
 
 		public async Task<IEnumerable<RouteGetBasicDTO>> GetAllBasicRoute()
 		{
@@ -163,6 +188,32 @@ namespace WebApplication_BusTimeline.Service
 
 		}
 
+		public async Task<RouteGetBasicDTO> CreateRoute(RoutePostDTO route)
+		{
+			try
+			{
+
+				var request = new HttpRequestMessage(HttpMethod.Post, $"api/Route");
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+
+				request.Content = JsonContent.Create(route);
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<RouteGetBasicDTO>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Nemoguce kreirati rutu");
+			}
+
+		}
+
+
 		public async Task<IEnumerable<RouteStopListDTO>> GetRouteStopByRouteId(int routeId)
 		{
 			try
@@ -216,32 +267,33 @@ namespace WebApplication_BusTimeline.Service
 			}
 		}
 
-		public async Task CreateStop(StopDTO stop)
-		{//??
+		public async Task<RouteStopGetDTO> CreateRouteStop(RouteStopPostDTO routeStop)
+		{
 			try
 			{
 
-				var request = new HttpRequestMessage(HttpMethod.Get, $"api/Stop");
-
+				var request = new HttpRequestMessage(HttpMethod.Post, $"api/Route");
 				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
-				var content = new StringContent("", null, "application/json");
-				request.Content = content;
 
+				request.Content = JsonContent.Create(routeStop);
 				var response = await _httpClient.SendAsync(request);
 				response.EnsureSuccessStatusCode();
 
-				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<StopGetBasicDTO>>(
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<RouteStopGetDTO>(
 					(await response.Content.ReadAsStreamAsync()),
 					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
 				return _d;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				throw new Exception( "Nemoguce kreirati stanicu");
+				throw new Exception("Nemoguce kreirati rutu");
 			}
+
 		}
 
 
+
 	}
+	
 }

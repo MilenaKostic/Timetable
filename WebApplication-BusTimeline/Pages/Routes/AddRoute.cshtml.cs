@@ -15,6 +15,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
         public List<RouteGetBasicDTO> Routes { get; set; }
 		public string? ErrorMessage { get; set; }
 
+		public List<RouteGetBasicDTO> routes { get; set; }
+
         [BindProperty]
         public RoutePostDTO routePostDTO { get; set; }
 
@@ -24,31 +26,6 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		}
 		public async Task OnGetAsync()
         {
-			//using (var httpClient = new HttpClient())
-			//{
-			//	try
-			//	{
-			//		using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
-			//		{
-			//			string apiResponse = await response.Content.ReadAsStringAsync();
-			//			try
-			//			{
-			//				var _routes = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
-			//				Routes = _routes.ToList();
-
-			//			}
-			//			catch (JsonSerializationException)
-			//			{
-			//				ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-			//			}
-			//		}
-
-			//	}
-			//	catch (Exception ex)
-			//	{
-			//		ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-			//	}
-
 			try 
 			{
 				Routes = (await _service.GetAllBasicRoute()).ToList();
@@ -63,120 +40,50 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		
 		public async Task OnPostAsync(RoutePostDTO routePostDTO)
 		{
-			//using (var httpClient = new HttpClient())
-			//{
-			//	try
-			//	{
-			//		using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/RouteByName?name={routePostDTO.Name}"))
-			//{
-		
 			try
 			{
-				//route = (await _service.GetRouteByName(routePostDTO.Name));
+				routes = (await _service.GetAllBasicRoute()).ToList();
+
+				foreach(var r in routes)
+				{
+					if(r.Name == routePostDTO.Name)
+					{
+						ErrorMessage = "Već postoji ruta sa ovim imenom, pokušajte ponovo!";
+						Routes = (await _service.GetAllBasicRoute()).ToList();
+						return;
+					}
+				}
+
+				RoutePostDTO newRoute = new RoutePostDTO
+				{
+					Name = routePostDTO.Name,
+					Color = routePostDTO.Color
+				};
+
+				try
+				{
+					var result = (await _service.CreateRoute(newRoute));
+				}
+				catch (Exception ex)
+				{
+					ErrorMessage = ex.Message;
+				}
+
+				try
+				{
+					Routes = (await _service.GetAllBasicRoute()).ToList();
+				}
+				catch (Exception ex)
+				{
+					ErrorMessage = ex.Message;
+				}			
+
 			}
-			catch (Exception e)
+			catch(Exception ex)
 			{
-				ErrorMessage = e.Message;
+				ErrorMessage = ex.Message; 
 			}
-
-
-
-						if (true)
-						{
-							//string apiResponse = await response.Content.ReadAsStringAsync();
-							//var _user = (JsonConvert.DeserializeObject<UserRegisterDTO>(apiResponse));
-							ErrorMessage = "Već postoji ruta sa ovim imenom, pokušajte ponovo!";
-
-							//try
-							//{
-							//	using (HttpResponseMessage response2 = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
-							//	{
-							//		string apiResponse2 = await response2.Content.ReadAsStringAsync();
-							//		try
-							//		{
-							//			var _routes = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse2);
-							//			Routes = _routes.ToList();
-
-							//		}
-							//		catch (JsonSerializationException)
-							//		{
-							//			ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-
-							//		}
-
-
-							//	}
-
-
-							//}
-							//catch (Exception ex)
-							//{
-							//	ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-
-							//}
-
-							try
-							{
-								Routes = (await _service.GetAllBasicRoute()).ToList();
-							}
-							catch(Exception ex)
-							{
-								ErrorMessage = ex.Message;
-							}
-						}
-						else
-						{
-
-							RoutePostDTO newRoute = new RoutePostDTO
-							{
-								Name = routePostDTO.Name,
-								Color = routePostDTO.Color
-							};
-
-							var _httpClient = new HttpClient();
-							var result = await _httpClient.PostAsync("https://localhost:7151/Route", new StringContent(JsonSerializer.Serialize(newRoute), Encoding.UTF8, "application/json"));
-
-
-							//try
-							//{
-							//	using (HttpResponseMessage response3 = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
-							//	{
-							//		string apiResponse = await response3.Content.ReadAsStringAsync();
-							//		try
-							//		{
-							//			var _routes = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
-							//			Routes = _routes.ToList();
-
-							//		}
-							//		catch (JsonSerializationException)
-							//		{
-							//			ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-
-							//		}
-
-
-							//	}
-
-
-							//}
-							//catch (Exception ex)
-							//{
-							//	ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-
-							//}
-
-							try
-							{
-								Routes = (await _service.GetAllBasicRoute()).ToList();
-							}
-							catch (Exception ex)
-							{
-								ErrorMessage = ex.Message;
-							}
-
-
-						}
-			
+				
 		}
 
 	}

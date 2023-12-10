@@ -24,12 +24,19 @@ namespace TimeTable.Api.Controllers
 		[HttpGet(Name = "RouteStopsAll")]
 		public async Task<IActionResult> GetRouteStops()
 		{
-			var r = await _repository.RouteStop.GetAll();
-			return Ok(r);
+			var routestops = await _repository.RouteStop.GetAll();
+
+			var routeStopDTO = routestops.Select(row => new RouteStopGetDTO()
+			{
+				Id = row.Id,
+				Rbr = row.Rbr
+
+			});
+			return Ok(routeStopDTO);
 		}
 
 
-		[Authorize(Roles = "User")]
+		//[Authorize(Roles = "User")]
 
 		[HttpGet("ByRouteId")]
 		public async Task<IActionResult> GetByRouteId(int Id)

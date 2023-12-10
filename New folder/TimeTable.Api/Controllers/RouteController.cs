@@ -18,17 +18,23 @@ namespace TimeTable.Api.Controllers
 			_repository = repository;
 		}
 
-	
 
 		[HttpGet(Name = "RoutesAll")]
 		public async Task<IActionResult> GetRoute()
 		{
-			var r = await _repository.Route.GetAll();
-			return Ok(r);
+			var routes = await _repository.Route.GetAll();
+
+			var routeDTO = routes.Select(row => new RouteGetBasicDTO()
+			{
+				Id = row.Id,
+				Name = row.RouteName
+			});
+
+			return Ok(routeDTO);
 		}
 
 
-		[Authorize(Roles = "User")]
+		//[Authorize(Roles = "User")]
 
 		[HttpGet("{Id:int}", Name = "RouteById")]
 		public async Task<IActionResult> GetById(int Id)

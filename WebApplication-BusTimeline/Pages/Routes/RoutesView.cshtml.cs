@@ -60,14 +60,14 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				}
 
 
-				try
-				{
-					Stops = (await _service.GetStopDTO()).ToList();
-				}
-				catch (Exception e)
-				{
-					ErrorMessage = e.Message;
-				}
+				//try
+				//{
+				//	Stops = (await _service.GetStopDTO()).ToList();
+				//}
+				//catch (Exception e)
+				//{
+				//	ErrorMessage = e.Message;
+				//}
 
 
 

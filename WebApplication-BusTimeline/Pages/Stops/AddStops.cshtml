@@ -12,7 +12,7 @@
 		<div id="map" style="height: 600px;"></div>
 </div>
 
-<div style="float: left; width:20%">
+<div style="float: left; width:20%" class="flex-column">
 	<h5>Unesite ime stanice:</h5>
 		<input type="text" id="stopName" name="stopName" required class="mb-2" />
 		@if(Model.ErrorMessage != null)
@@ -32,6 +32,9 @@
 			}
 
 		}
+
+		<label id="labelLat"></label>
+		<label id="labelLon"></label>
 		
 		<div style="position:absolute; bottom : 0; left:0;">
 			<a href="../Index">Home</a>
@@ -41,19 +44,35 @@
 	
 
 	<script>
+		console.log("Start map");
+
 		var map = L.map('map').setView([44.968190, 19.608141], 16);
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 		}).addTo(map);
 
-		
-		map.on('click', function (e) {
+		var marker = null; 
+
+		function onMapClick(e) {
+			if (marker != null) {
+				map.removeLayer(marker);
+			}
+
+			console.log(e.latlng.lat);
+			console.log(e.latlng.lng);
+
 			document.getElementById("lat").value = e.latlng.lat;
 			document.getElementById("lon").value = e.latlng.lng;
 
-		});
 
-		var lat = e.latlng.lat; 
+			document.getElementById("labelLat").innerHTML = e.latlng.lat;
+			document.getElementById("labelLon").innerHTML = e.latlng.lng;
+
+			marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
+
+		} 
+
+		map.on('click', onMapClick);
 
 	</script>
 	

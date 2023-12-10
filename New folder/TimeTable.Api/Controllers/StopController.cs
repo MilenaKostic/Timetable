@@ -18,12 +18,20 @@ namespace TimeTable.Api.Controllers
 			_repository = repository;
 		}
 
-		[Authorize(Roles ="User")]
+		//[Authorize(Roles ="User")]
 		[HttpGet(Name = "AllStops")]
 		public async Task<IActionResult> GetStop()
 		{
-			var s = await _repository.Stop.GetAll();
-			return Ok(s);
+			var stops = await _repository.Stop.GetAll();
+
+			var stopsDTO = stops.Select(row => new StopGetBasicDTO()
+			{
+				Id = row.Id,
+				Name = row.StopName
+			});
+
+			
+			return Ok(stopsDTO);
 		}
 
 
