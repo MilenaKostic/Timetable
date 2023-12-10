@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTable.Api.Interfaces;
-using TimeTable.Api.Repositories;
-using TimeTable.Shared.DTO;
-using TimeTable.Shared.DTO.Route;
+using Shared.DTO;
+using TimeTable.Api.Entities.Models;
 
 namespace TimeTable.Api.Controllers
 {
@@ -28,6 +27,7 @@ namespace TimeTable.Api.Controllers
 			return Ok(r);
 		}
 
+
 		[Authorize(Roles = "User")]
 
 		[HttpGet("{Id:int}", Name = "RouteById")]
@@ -49,6 +49,7 @@ namespace TimeTable.Api.Controllers
 
 		}
 
+
 		[HttpGet("RouteByName")]
 		public async Task<IActionResult> GetRouteByName(String name)
 		{
@@ -66,6 +67,7 @@ namespace TimeTable.Api.Controllers
 				Color = r.RouteColor
 			});
 		}
+
 
 		[HttpPut()]
 		public async Task<IActionResult> RouteUpdate([FromBody] RoutePutDTO route, [FromQuery] int id)
@@ -87,6 +89,7 @@ namespace TimeTable.Api.Controllers
 
 		}
 
+
 		[HttpDelete()]
 		public async Task<IActionResult> Delete([FromQuery] int id)
 		{
@@ -102,6 +105,31 @@ namespace TimeTable.Api.Controllers
 			await _repository.SaveAsync();
 
 			return NoContent();
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> CreateRoute([FromBody] RoutePostDTO route)
+		{
+			var RouteEntity = new Entities.Models.Route()
+			{
+				RouteName = route.Name,
+				RouteColor = route.Color,
+				
+			};
+
+			_repository.Route.CreateRoute(RouteEntity);
+
+			await _repository.SaveAsync();
+
+			var routebasic = new RouteGetBasicDTO()
+			{
+				Id = RouteEntity.Id,
+				Name = route.Name,
+				
+			};
+
+			return CreatedAtRoute("RouteById", new { Id = routebasic.Id }, routebasic);
 		}
 
 

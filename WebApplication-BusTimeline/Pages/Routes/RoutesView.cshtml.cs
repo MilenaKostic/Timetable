@@ -1,15 +1,17 @@
 //using Azure;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Shared.DTO;
-using Shared.DTO.Route;
+using WebApplication_BusTimeline.Service;
 
 namespace WebApplication_BusTimeline.Pages.Routes
 {
 	public class MapModel : PageModel
 	{
+		public IServiceManager _service;
 		[BindProperty(SupportsGet = true)]
 		public string routeName { get; set; }
 		public List<RouteStopListDTO> RouteStops { get; set; }
@@ -19,136 +21,77 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 		public List<RouteGetBasicDTO> Routes { get; set; }
 
-        public async Task OnGetAsync(string routeName)
+		public MapModel(IServiceManager service)
 		{
-			if(routeName != null)
+			_service = service;
+		}
+
+		public async Task OnGetAsync(string routeName)
+		{
+			if (routeName != null)
 			{
-				using (var httpClient = new HttpClient())
+				try
 				{
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route/RouteByName?name={routeName}"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							try
-							{
-								var _route = JsonConvert.DeserializeObject<RouteDTO>(apiResponse);
-								RouteId = _route.Id;
-							}
-							catch (JsonSerializationException)
-							{
-								ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-							}
-						}
+					var _route = (await _service.GetRouteByName(routeName));
+					RouteId = _route.Id;
+				}
+				catch (Exception e)
+				{
+					ErrorMessage = e.Message;
+				}
 
-					}
-					catch (Exception ex)
-					{
-						ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-					}
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							try
-							{
-								var _routes = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
-								Routes = _routes.ToList(); 
-							}
-							catch (JsonSerializationException)
-							{
-								ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-							}
-						}
-
-					}
-					catch (Exception ex)
-					{
-						ErrorMessage = "Lista ruta je trenutno nedostupna, pokušajte kasnije";
-					}
+				try
+				{
+					Routes = (await _service.GetAllBasicRoute()).ToList();
+				}
+				catch (Exception ex)
+				{
+					ErrorMessage = ex.Message;
+				}
 
 
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/RouteStop/{RouteId}"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							try
-							{
-								var _routeStops = (JsonConvert.DeserializeObject<List<RouteStopListDTO>>(apiResponse)).ToList();
-								RouteStops = _routeStops;
-							}
-							catch (JsonSerializationException)
-							{
-								ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-							}
-						}
-
-					}
-					catch (Exception ex)
-					{
-						ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-					}
-
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							try
-							{
-								var _stops = JsonConvert.DeserializeObject<List<StopDTO>>(apiResponse);
-								Stops = _stops.ToList();
-
-							}
+				try
+				{
+					RouteStops = (await _service.GetRouteStopByRouteId(RouteId)).ToList();
+				}
+				catch (Exception e)
+				{
+					ErrorMessage = e.Message;
+				}
 
 
-							catch (Exception ex)
-							{
-								ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-							}
-						}
-					}
-                    catch (Exception ex)
-                    {
-                        ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-                    }
-                }
+				try
+				{
+					Stops = (await _service.GetStopDTO()).ToList();
+				}
+				catch (Exception e)
+				{
+					ErrorMessage = e.Message;
+				}
+
+
+
+
+
 			}
 			else
 			{
-				using (var httpClient = new HttpClient())
+				try
 				{
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Route"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							try
-							{
-								var _route = JsonConvert.DeserializeObject<List<RouteGetBasicDTO>>(apiResponse);
-								Routes = _route.ToList();
-							}
-							catch (JsonSerializationException)
-							{
-								ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-							}
-						}
-
-					}
-					catch (Exception ex)
-					{
-						ErrorMessage = "Željena ruta je trenutno nedostupna, pokušajte kasnije";
-					}
-					ErrorMessage = "Izaberite željenu rutu";
+					Routes = (await _service.GetAllBasicRoute()).ToList();
 				}
-            }
+				catch (Exception ex)
+				{
+					ErrorMessage = ex.Message;
+				}
 
+				ErrorMessage = "Izaberite željenu rutu";
+			}
 		}
-
-	}
 	
+	}
 
 }
+	
+
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApplication_BusTimeline.Service; 
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,15 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
+var webApiAddress = "http://localhost:5099/";
+builder.Services.AddScoped(sp => new HttpClient
+{
+	BaseAddress = new Uri(webApiAddress),
+});
+
 
 
 var app = builder.Build();

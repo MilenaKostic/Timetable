@@ -7,8 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using TimeTable.Api.Entities.ConfigurationModels;
 using TimeTable.Api.Entities.Models;
-using TimeTable.Shared.DTO.User;
-using TimeTable.Shared.Dto;
+using Shared.DTO;
 using TimeTable.Api.Entities;
 
 namespace TimeTable.Api.Service;
@@ -31,7 +30,7 @@ internal sealed class AuthenticationService : IAuthenticationService
 		_jwtConfiguration = _configuration.Value;
 	}
 
-	public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
+	public async Task<IdentityResult> RegisterUser(UserForRegistrationDTO userForRegistration)
 	{
 		//var user = _mapper.Map<User>(userForRegistration);
 
@@ -53,7 +52,7 @@ internal sealed class AuthenticationService : IAuthenticationService
 		return result;
 	}
 
-	public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
+	public async Task<bool> ValidateUser(UserForAuthenticationDTO userForAuth)
 	{
 		_user = await _userManager.FindByNameAsync(userForAuth.UserName);
 

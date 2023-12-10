@@ -37,7 +37,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripPostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Trip\TripPutDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\Token.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserForAuthenticationDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserForRegistrationDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserGetBasicDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserLoginDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\User\UserPostDTO.cs" />

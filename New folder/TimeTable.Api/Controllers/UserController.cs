@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TimeTable.Api.Entities.Models;
 using TimeTable.Api.Interfaces;
-using TimeTable.Shared.DTO;
+using Shared.DTO;
 
 namespace TimeTable.Api.Controllers
 {
@@ -17,12 +17,14 @@ namespace TimeTable.Api.Controllers
 			_repository = repository;
 		}
 
+
 		[HttpGet(Name = "AllUsers")]
 		public async Task<IActionResult> GetUser()
 		{
 			var u = await _repository.User.GetAll();
 			return Ok(u);
 		}
+
 
 		[HttpGet("{Id:int}", Name = "UserById")]
 		public async Task<IActionResult> GetUserById(int Id)
@@ -44,6 +46,7 @@ namespace TimeTable.Api.Controllers
 
 		}
 
+
 		[HttpGet("{Name}", Name = "UserByName")]
 		public async Task<IActionResult> GetUserByName(string Name)
 		{
@@ -63,6 +66,7 @@ namespace TimeTable.Api.Controllers
 				Password = u.PasswordHash
 			});
 		}
+
 
 		[HttpPut]
 		public async Task<IActionResult> UserUpdate([FromBody] UserPutDTO user, [FromQuery] int Id)
@@ -87,6 +91,7 @@ namespace TimeTable.Api.Controllers
 
 		}
 
+
 		[HttpDelete()]
 		public async Task<IActionResult> Delete([FromQuery] int Id)
 		{
@@ -103,5 +108,6 @@ namespace TimeTable.Api.Controllers
 
 			return NoContent();
 		}
+
 	}
 }

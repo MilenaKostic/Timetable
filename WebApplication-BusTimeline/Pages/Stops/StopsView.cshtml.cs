@@ -3,36 +3,35 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 //using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Shared.DTO;
+using WebApplication_BusTimeline.Service;
 
 namespace WebApplication_BusTimeline.Pages.Stops
 {
     public class StopsViewModel : PageModel
     {
+        public IServiceManager _service;
         public Int32? StanicaId { get; set; }
         public List<StopGetBasicDTO> LstStops { get; set; }
         public StopDTO SelectedStop { get; set; }
         public string? ErrorMessage;
 
+        public StopsViewModel(IServiceManager service)
+        {
+            _service = service;
+        }
+
+
         public async Task OnGetAsync(string stanicaId)
         {
-            using(var httpClient = new HttpClient())
+            try
             {
-                try
-                {
-                    using(HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5099/api/Stop"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var _stops = (JsonConvert.DeserializeObject<List<StopGetBasicDTO>>(apiResponse)).ToList();
-
-                        LstStops = _stops.ToList();
-
-                    }
-                }
-                catch(Exception e)
-                {
-                    ErrorMessage = "Lista stanica je trenutno nedostupna, pokušajte kasnije";
-                }
+                LstStops = (await _service.GetAllBasicStop()).ToList();
             }
+            catch(Exception e)
+            {
+                ErrorMessage = e.Message;
+            }
+            
 
             StanicaId = null;
             int _stanicaId = -1;
@@ -44,20 +43,30 @@ namespace WebApplication_BusTimeline.Pages.Stops
 
             if(StanicaId != null)
             {
-                using(var httpClient = new HttpClient())
+                //using(var httpClient = new HttpClient())
+                //{
+                //    try
+                //    {
+                //        using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Stop/{StanicaId}"))
+                //        {
+                //            string apiResponse = await response.Content.ReadAsStringAsync();
+                //            SelectedStop = JsonConvert.DeserializeObject<StopDTO>(apiResponse);
+                //        }
+                //    }
+                //    catch(Exception e)
+                //    {
+                //        ErrorMessage = "Željena stanica je trenutno nedostupna, pokušajte kasnije";
+                //    }
+                //}
+
+                try
                 {
-                    try
-                    {
-                        using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/Stop/{StanicaId}"))
-                        {
-                            string apiResponse = await response.Content.ReadAsStringAsync();
-                            SelectedStop = JsonConvert.DeserializeObject<StopDTO>(apiResponse);
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        ErrorMessage = "Željena stanica je trenutno nedostupna, pokušajte kasnije";
-                    }
+                    
+                    //SelectedStop = await _service.GetStopById(StanicaId);
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = e.Message;
                 }
             }
 

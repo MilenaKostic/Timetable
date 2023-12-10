@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTable.Api.Interfaces;
-using TimeTable.Shared.DTO.Route;
-using TimeTable.Shared.DTO;
+using Shared.DTO;
+using TimeTable.Api.Entities.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace TimeTable.Api.Controllers
 {
@@ -26,9 +28,10 @@ namespace TimeTable.Api.Controllers
 			return Ok(r);
 		}
 
+
 		[Authorize(Roles = "User")]
 
-		[HttpGet("{RouteId}", Name = "RouteStopByRouteId")]
+		[HttpGet("ByRouteId")]
 		public async Task<IActionResult> GetByRouteId(int Id)
 		{
 			var r = await _repository.RouteStop.GetByRouteId(Id, false);
@@ -53,6 +56,7 @@ namespace TimeTable.Api.Controllers
 
 
 		}
+
 
 		[HttpGet("{Id:int}", Name = "RouteStopById")]
 		public async Task<IActionResult> GetById(int Id)
@@ -80,7 +84,8 @@ namespace TimeTable.Api.Controllers
 
 		}
 
-	[HttpDelete()]
+
+		[HttpDelete()]
 		public async Task<IActionResult> Delete([FromQuery] int id)
 		{
 			var rEntity = await _repository.RouteStop.GetById(id, true);
@@ -95,6 +100,32 @@ namespace TimeTable.Api.Controllers
 			await _repository.SaveAsync();
 
 			return NoContent();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreateRouteSTop([FromBody] RouteStopPostDTO routeStop)
+		{
+			var RouteStopEntity = new RouteStop()
+			{
+				RouteId = routeStop.RouteId,
+				StopId = routeStop.StopId,
+				TimeInterval = routeStop.TimeInterval,
+				MetarDistance = routeStop.MetarDistance,				
+
+			};
+
+			_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+
+			await _repository.SaveAsync();
+
+			var routestopbasic = new RouteStopBasicDTO()
+			{
+				Id = RouteStopEntity.Id,
+				Rbr = RouteStopEntity.Rbr
+
+			};
+
+			return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
 		}
 
 

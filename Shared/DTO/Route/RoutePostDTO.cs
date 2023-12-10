@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shared.DTO.Route
+namespace Shared.DTO
 {
     public class RoutePostDTO
     {

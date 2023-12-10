@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TimeTable.Shared.DTO.User;
-using TimeTable.Shared.Dto;
+using Shared.DTO; 
 using TimeTable.Api.Service;
 
 namespace TimeTable.Api.Controllers;
@@ -14,7 +13,7 @@ public class AuthenticationController : ControllerBase
 	public AuthenticationController(IAuthenticationService service) => _service = service;
 
 	[HttpPost("Create")]
-	public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)
+	public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
 	{
 		var result = await _service.RegisterUser(userForRegistration);
 		if (!result.Succeeded)
@@ -30,7 +29,7 @@ public class AuthenticationController : ControllerBase
 	}
 
 	[HttpPost("login")]
-	public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+	public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO user)
 	{
 		if (!await _service.ValidateUser(user))
 			return Unauthorized();
