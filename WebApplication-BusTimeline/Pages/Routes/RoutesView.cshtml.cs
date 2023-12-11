@@ -20,72 +20,36 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public List<StopDTO> Stops { get; set; }
 
 		public List<RouteGetBasicDTO> Routes { get; set; }
+		public RouteWithStopsDTO RouteWithStop { get; set; }
 
 		public MapModel(IServiceManager service)
 		{
 			_service = service;
 		}
 
-		public async Task OnGetAsync(string routeName)
+		public async Task OnGetAsync(string routeId)
 		{
-			if (routeName != null)
+			int RouteId = 0;
+			try
 			{
-				try
+				Routes = (await _service.GetAllBasicRoute()).ToList();
+
+			}
+			catch
+			{
+				ErrorMessage = "Nije moguce dobaviti listu ruta.";
+			}
+
+			if (routeId != null)
+			{
+				if(int.TryParse(routeId, out RouteId))
 				{
-					var _route = (await _service.GetRouteByName(routeName));
-					RouteId = _route.Id;
+					RouteWithStop = await _service.GetRouteWithStops(RouteId);
 				}
-				catch (Exception e)
-				{
-					ErrorMessage = e.Message;
-				}
-
-				try
-				{
-					Routes = (await _service.GetAllBasicRoute()).ToList();
-				}
-				catch (Exception ex)
-				{
-					ErrorMessage = ex.Message;
-				}
-
-
-				try
-				{
-					RouteStops = (await _service.GetRouteStopByRouteId(RouteId)).ToList();
-				}
-				catch (Exception e)
-				{
-					ErrorMessage = e.Message;
-				}
-
-
-				//try
-				//{
-				//	Stops = (await _service.GetStopDTO()).ToList();
-				//}
-				//catch (Exception e)
-				//{
-				//	ErrorMessage = e.Message;
-				//}
-
-
-
-
-
 			}
 			else
 			{
-				try
-				{
-					Routes = (await _service.GetAllBasicRoute()).ToList();
-				}
-				catch (Exception ex)
-				{
-					ErrorMessage = ex.Message;
-				}
-
-				ErrorMessage = "Izaberite željenu rutu";
+				ErrorMessage = "Izaberite rutu"; 
 			}
 		}
 	

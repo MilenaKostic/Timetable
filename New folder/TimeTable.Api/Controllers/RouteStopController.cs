@@ -41,27 +41,27 @@ namespace TimeTable.Api.Controllers
 		[HttpGet("ByRouteId")]
 		public async Task<IActionResult> GetByRouteId(int Id)
 		{
-			var r = await _repository.RouteStop.GetByRouteId(Id, false);
+			var r = await _repository.Route.GetById(Id, false);
 
 			if (r == null)
 			{
 				return NotFound();
 			}
 
-			return Ok(new RouteStopListDTO()
+			var routeStop = r.RouteStops.Select(row => new RouteStopListDTO()
 			{
-				Id = r.Id,
-				Rbr = r.Rbr,
+				Id = row.Id,
+				Rbr = row.Rbr,
 				Stop = new StopDTO()
 				{
-					Id = r.Stop.Id,
-					Name = r.Stop.StopName,
-					Lat = r.Stop.StopLat,
-					Lon = r.Stop.StopLon
+					Id = row.Stop.Id,
+					Name = row.Stop.StopName,
+					Lat = row.Stop.StopLat,
+					Lon = row.Stop.StopLon
 				}
-			});
+			}).ToList();
 
-
+			return Ok(routeStop); 
 		}
 
 
@@ -110,7 +110,7 @@ namespace TimeTable.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateRouteSTop([FromBody] RouteStopPostDTO routeStop)
+		public async Task<IActionResult> CreateRouteStop([FromBody] RouteStopPostDTO routeStop)
 		{
 			var RouteStopEntity = new RouteStop()
 			{

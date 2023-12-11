@@ -17,8 +17,9 @@ namespace WebApplication_BusTimeline.Pages.Routes
 	public class RouteDetailsModel : PageModel
 	{
 		public IServiceManager _service;
-		public RouteDTO Route { get; set; }
-		public List<StopGetBasicDTO> Stops { get; set; }
+		public RouteWithStopsDTO RouteWithStops { get; set; }
+
+		public List<StopGetBasicDTO> Stops = new List<StopGetBasicDTO>(); 
 		public List<RouteStopListDTO> RouteStops { get; set; }
 		public Int32 LastRBr { get; set; }
 		public string? ErrorMessage { get; set; }
@@ -61,28 +62,20 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			try 
 			{
 				int routeID = Int32.Parse(routeId);
-				Route = await _service.GetRouteById(routeID);			
+				RouteWithStops = await _service.GetRouteWithStops(routeID);
+				LastRBr = RouteWithStops.Stops.Max(x => x.Rbr); 
 			}
 			catch(Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
 
+			
 			try
 			{
 				Stops = (await _service.GetAllBasicStop()).ToList();
 				StanicaList = Stops.Select(row => new SelectListItem() { Value = row.Id.ToString(), Text = row.Name }).ToList();
-			}
-			catch(Exception e)
-			{
-				ErrorMessage = e.Message;
-			}
 
-			try
-			{
-				int RouteId = Int32.Parse(routeId);
-				RouteStops = (await _service.GetRouteStopByRouteId(RouteId)).ToList();
-				LastRBr = RouteStops.Max(x => x.Rbr);
 			}
 			catch (Exception e)
 			{
@@ -96,21 +89,21 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 			try
 			{
-				RouteStops = (await _service.GetRouteStopByRouteId(routeId)).ToList();
+				RouteWithStops = (await _service.GetRouteWithStops(routeId));
 			}
 			catch (Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
 
-			
-			foreach(var s in RouteStops)
+
+			foreach (var s in RouteWithStops.Stops)
 			{
-				if(s.Id == stanicaId && s.Rbr == RBr)
+				if (s.Id == stanicaId && s.Rbr == RBr)
 				{
 					try
 					{
-						 await _service.DeleteRouteStopById(s.Id);
+						await _service.DeleteRouteStopById(s.Id);
 					}
 					catch (Exception e)
 					{
@@ -120,42 +113,38 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				}
 			}
 
-
 			try
 			{
-				
-				Route = await _service.GetRouteById(routeId);
+				RouteWithStops = await _service.GetRouteWithStops(routeId);
+				LastRBr = RouteWithStops.Stops.Max(x => x.Rbr);
 			}
 			catch (Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
 
-		
 
-			try {
+			try
+			{
 				Stops = (await _service.GetAllBasicStop()).ToList();
+				StanicaList = Stops.Select(row => new SelectListItem() { Value = row.Id.ToString(), Text = row.Name }).ToList();
 
-			}
-			catch(Exception e)
-			{
-				ErrorMessage = e.Message; 
-			}
-
-			try
-			{
-				RouteStops = (await _service.GetRouteStopByRouteId(routeId)).ToList();
-				LastRBr = RouteStops.Max(x => x.Rbr);
 			}
 			catch (Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
 
-        }
+
+
+
+
+
+		}
 
 		public async Task<IActionResult> OnPost()
 		{
+			int _routeId = 0;
 			try
 			{
 				RouteStopPostDTO newRouteStop = new RouteStopPostDTO()
@@ -168,54 +157,68 @@ namespace WebApplication_BusTimeline.Pages.Routes
 					SelectRbr = String.IsNullOrEmpty(SelectRbr) ? (new int?()) : Convert.ToInt32(SelectRbr)
 				};
 
-				
-				try
-				{
-					await _service.CreateRouteStop(newRouteStop);
-					LastRBr = RouteStops.Max(x => x.Rbr);
-				}
-				catch (Exception e)
-				{
-					ErrorMessage = e.Message;
-				}
+				await _service.CreateRouteStop(newRouteStop);
+
+				//try
+				//{
+				//	await _service.CreateRouteStop(newRouteStop);
+				//	if (RouteStops.Count == 0)
+				//	{
+				//		LastRBr = 1;
+				//	}
+				//	else
+				//	{
+				//		LastRBr = RouteStops.Max(x => x.Rbr);
+				//	}
+
+				//}
+				//catch (Exception e)
+				//{
+				//	ErrorMessage = e.Message;
+				//}
 
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				ErrorMessage = e.Message.ToString();
 			}
 
+			
+
 			try
 			{
-				int RouteID = Int32.Parse(RouteId);
-				Route = await _service.GetRouteById(RouteID);
+				if (RouteId != null)
+				{
+					if (int.TryParse(RouteId, out _routeId))
+					{
+						RouteWithStops = await _service.GetRouteWithStops(_routeId);
+					}
+				}
+				else
+				{
+					ErrorMessage = "Izaberite rutu";
+				}
+
 			}
 			catch (Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
+
 
 			try
 			{
 				Stops = (await _service.GetAllBasicStop()).ToList();
 				StanicaList = Stops.Select(row => new SelectListItem() { Value = row.Id.ToString(), Text = row.Name }).ToList();
-			}
-			catch(Exception e)
-			{
-				ErrorMessage = e.Message; 
-			}
 
-			try
-			{
-				int routeId = Int32.Parse(RouteId);
-				Route = await _service.GetRouteById(routeId);
 			}
 			catch (Exception e)
 			{
 				ErrorMessage = e.Message;
 			}
+
 			return Page();
-        }
+		}
 
 	}
 }

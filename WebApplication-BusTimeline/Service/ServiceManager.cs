@@ -213,6 +213,33 @@ namespace WebApplication_BusTimeline.Service
 
 		}
 
+		public async Task DeleteRoute(int id)
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Delete, $"api/Route?id={id}");
+
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				var content = new StringContent("", null, "application/json");
+				request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				//var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<RouteStopListDTO>>(
+				//	(await response.Content.ReadAsStreamAsync()),
+				//	new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				//return _d;
+
+				return;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Lista stanica na ruti je trenutno nedostupna, pokušajte kasnije");
+			}
+		}
+
 
 		public async Task<IEnumerable<RouteStopListDTO>> GetRouteStopByRouteId(int routeId)
 		{
@@ -272,7 +299,7 @@ namespace WebApplication_BusTimeline.Service
 			try
 			{
 
-				var request = new HttpRequestMessage(HttpMethod.Post, $"api/Route");
+				var request = new HttpRequestMessage(HttpMethod.Post, $"api/RouteStop");
 				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
 
 				request.Content = JsonContent.Create(routeStop);
@@ -292,7 +319,31 @@ namespace WebApplication_BusTimeline.Service
 
 		}
 
+		public async Task<RouteWithStopsDTO> GetRouteWithStops(int routeId)
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, $"api/Route/{routeId}");
 
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				var content = new StringContent("", null, "application/json");
+				request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<RouteWithStopsDTO>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Stanica je trenutno nedostupna, pokušajte kasnije");
+			}
+
+		}
 
 	}
 	

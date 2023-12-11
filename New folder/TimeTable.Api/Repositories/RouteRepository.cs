@@ -20,7 +20,9 @@ namespace TimeTable.Api.Repositories
 
 		public async Task<Entities.Models.Route> GetById(int id, Boolean trackChanges)
 		{
-			return await FindByCondition(x => x.Id == id, trackChanges).FirstOrDefaultAsync();
+			return await FindByCondition(x => x.Id == id, trackChanges)
+				.Include(rs => rs.RouteStops).ThenInclude(s => s.Stop)
+				.FirstOrDefaultAsync();
 		}
 
 		public async Task<Entities.Models.Route> GetByName(string name)

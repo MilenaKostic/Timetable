@@ -35,6 +35,14 @@ public class RoutesView2Model : PageModel
 
     public async Task OnPostDeleteRouteAsync(int routeId)
 	{
+		try
+		{
+			await _service.DeleteRoute(routeId);
+		}
+		catch (Exception ex)
+		{
+			ErrorMessage = ex.Message;
+		}
 
 		try
 		{
@@ -44,7 +52,7 @@ public class RoutesView2Model : PageModel
 		{
 			ErrorMessage = ex.Message;
 		}
-        
-    }
+
+	}
 }
 

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using TimeTable.Api.Interfaces;
 using Shared.DTO;
 using TimeTable.Api.Entities.Models;
+using Shared.DTO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace TimeTable.Api.Controllers
 {
@@ -46,13 +48,27 @@ namespace TimeTable.Api.Controllers
 				return NotFound();
 			}
 
-			return Ok(new RouteDTO()
+			var routeDTO = new RouteWithStopsDTO()
 			{
 				Id = r.Id,
 				Name = r.RouteName,
-				Color = r.RouteColor
-			});
+				Color = r.RouteColor,
+				Stops = r.RouteStops.Select(row => new RouteStopListDTO()
+				{
+					Id = row.Id,
+					Rbr = row.Rbr,
+					Stop = new StopDTO()
+					{
+						Id = row.Stop.Id,
+						Name = row.Stop.StopName,
+						Lat = row.Stop.StopLat,
+						Lon = row.Stop.StopLon
 
+					}
+
+				}).ToList()
+			};
+			return Ok(routeDTO);			
 		}
 
 
