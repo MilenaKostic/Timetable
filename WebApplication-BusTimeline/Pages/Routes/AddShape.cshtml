@@ -1,0 +1,103 @@
+﻿@page
+@model WebApplication_BusTimeline.Pages.Routes.AddShapeModel
+@{
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
+
+<div style="float: left; width: 80%">
+		<div id="map" style="height: 600px;"></div>
+</div>
+
+<div style="float: right; width:18%" class="flex-column">
+	<h4>Dodate tacke u rutu</h4>
+	<table class="table">
+		<thead class="table-primary">
+			<tr>
+				<td>Id</td>
+				<td>Redni broj</td>
+				<td>Latitude</td>			
+				<td>Longitude</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody class="table-secondary">
+
+			@foreach(var s in Model.Shapes)
+			{
+				<tr>
+					<td>@s.Id</td>
+					<td>@s.RBr</td>
+					<td>@s.Lat</td>
+					<td>@s.Lon</td>
+					<td>
+						<form method="post" asp-page-handler="DeleteShape" asp-route-shapeId="@s.Id">
+							<button class="btn btn-primary" style="background-color:white; width:40px; height:40px; display: flex; align-items: center; justify-content: center;">
+								<svg width="40px" height="40px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M352 192V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64H96a32 32 0 0 1 0-64h256zm64 0h192v-64H416v64zM192 960a32 32 0 0 1-32-32V256h704v672a32 32 0 0 1-32 32H192zm224-192a32 32 0 0 0 32-32V416a32 32 0 0 0-64 0v320a32 32 0 0 0 32 32zm192 0a32 32 0 0 0 32-32V416a32 32 0 0 0-64 0v320a32 32 0 0 0 32 32z"></path></g></svg>
+							</button>
+						</form>
+					</td>
+
+				</tr>
+				
+			}
+			
+		</tbody>
+	</table>
+		
+		<div style="position:absolute; bottom : 0; left:0;">
+			<a href="../Index">Home</a>
+		</div>
+</div>
+		
+	
+
+	<script>
+		console.log("Start map");
+
+		var map = L.map('map').setView([44.968190, 19.608141], 16);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+		}).addTo(map);
+
+
+		var coordinates = [];
+
+
+
+		function onMapClick(e) {
+			
+			console.log(e.latlng.lat);
+			console.log(e.latlng.lng);
+
+
+			marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
+			coordinates.push({ lat: e.latlng.lat, lon: e.latlng.lng });
+
+			console.log(coordinates); 
+
+		} 
+
+		map.on('click', onMapClick);
+
+	</script>
+	
+
+@* 
+	<input type="hidden" asp-for="lat" id="lat"/>
+	<input type="hidden" asp-for="lon" id="lon"/> *@
+
+@* 
+			document.getElementById("lat").value = e.latlng.lat;
+			document.getElementById("lon").value = e.latlng.lng;
+
+
+			document.getElementById("labelLat").innerHTML = e.latlng.lat;
+			document.getElementById("labelLon").innerHTML = e.latlng.lng; *@
+
+	
+
+

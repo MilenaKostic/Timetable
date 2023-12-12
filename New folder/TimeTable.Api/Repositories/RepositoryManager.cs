@@ -11,6 +11,7 @@ namespace TimeTable.Api.Repositories
 		private readonly Lazy<IStopRepository> _stopRepository;
 		private readonly Lazy<IUserRepository> _userRepository;
 		private readonly Lazy<IRouteStopRepository> _routestopRepository;
+		private readonly Lazy<IShapeRepository> _shapeRepository; 
 
 		public RepositoryManager(RepositoryContext repositoryContext)
 		{
@@ -20,6 +21,7 @@ namespace TimeTable.Api.Repositories
 			_stopRepository =  new Lazy<IStopRepository>(() => new StopRepository(repositoryContext));
 			_userRepository =  new Lazy<IUserRepository>(() => new UserRepository(repositoryContext));
 			_routestopRepository =  new Lazy<IRouteStopRepository>(() => new RouteStopRepository(repositoryContext));
+			_shapeRepository = new Lazy<IShapeRepository>(() => new ShapeRepository(repositoryContext));
 			
 		}
 
@@ -27,6 +29,7 @@ namespace TimeTable.Api.Repositories
 		public IStopRepository Stop => _stopRepository.Value;
 		public IUserRepository User => _userRepository.Value;
 		public IRouteStopRepository RouteStop => _routestopRepository.Value;
+		public IShapeRepository Shape => _shapeRepository.Value;
 
 		public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
 	}

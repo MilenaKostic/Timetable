@@ -26,6 +26,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RoutePostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RoutePutDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Route\RouteWithStopsDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Shape\ShapeBasicDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Shape\ShapeDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Shape\ShapePostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimeDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimePostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\StopTime\StopTimePutDTO.cs" />

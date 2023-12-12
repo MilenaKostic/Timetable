@@ -18,5 +18,8 @@ namespace WebApplication_BusTimeline.Service
 		Task DeleteRouteStopById(int id);
 		Task <RouteStopGetDTO> CreateRouteStop(RouteStopPostDTO route);
 		Task<RouteWithStopsDTO> GetRouteWithStops(int routeId);
+
+		Task<IEnumerable<ShapeDTO>> GetAllShape();
+		Task DeleteShapeById(int id); 
 	}
 }

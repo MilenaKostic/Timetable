@@ -345,6 +345,56 @@ namespace WebApplication_BusTimeline.Service
 
 		}
 
+
+		public async Task<IEnumerable<ShapeDTO>> GetAllShape()
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, $"api/Shape");
+
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				var content = new StringContent("", null, "application/json");
+				request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Lista tacaka u obliku je trenutno nedostupna, pokušajte kasnije");
+			}
+		}
+
+		public async Task DeleteShapeById(int id)
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Delete, $"api/Shape?Id={id}");
+
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				var content = new StringContent("", null, "application/json");
+				request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				
+				return;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Lista stanica na ruti je trenutno nedostupna, pokušajte kasnije");
+			}
+		}
+
+
+
 	}
 	
 }
