@@ -18,6 +18,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public string? ErrorMessage { get; set; }
 		public int RouteId { get; set; }
 		public List<StopDTO> Stops { get; set; }
+		public List<ShapeDTO> Shapes { get; set; }
 
 		public List<RouteGetBasicDTO> Routes { get; set; }
 		public RouteWithStopsDTO RouteWithStop { get; set; }
@@ -32,6 +33,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			int RouteId = 0;
 			try
 			{
+
 				Routes = (await _service.GetAllBasicRoute()).ToList();
 
 			}
@@ -46,6 +48,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				{
 					RouteWithStop = await _service.GetRouteWithStops(RouteId);
 				}
+				RouteId = int.Parse(routeId);
+				Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();
 			}
 			else
 			{

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shared.DTO;
+using System.Xml.Serialization;
 using WebApplication_BusTimeline.Service;
 
 namespace WebApplication_BusTimeline.Pages.Routes
@@ -10,16 +11,33 @@ namespace WebApplication_BusTimeline.Pages.Routes
         public IServiceManager _service;
         public string ErrorMessage { get; set; }
         public List<ShapeDTO> Shapes { get; set; }
+		public RouteWithStopsDTO RouteWithStops { get; set; }
 
-        public AddShapeModel(IServiceManager service)
+		public AddShapeModel(IServiceManager service)
         {
             _service = service;
         }
-        public async void OnGet()
+
+        public int RouteId { get; set; }
+        public async Task OnGetAsync(int id, double lat, double lon)
         {
+            RouteId = id;
             try
             {
-                Shapes = (await _service.GetAllShape()).ToList(); 
+                if(lat !=  0 && lon != 0)
+                {
+                    var createShape = new ShapePostDTO()
+                    {
+                        RouteId = RouteId,
+                        Lat = lat,
+                        Lon = lon
+                    };
+
+                    await _service.CreateShape(createShape);
+                }
+                Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();
+
+               // RouteWithStops = await _service.GetRouteWithStops(id);
             }
             catch (Exception ex)
             {
@@ -27,11 +45,11 @@ namespace WebApplication_BusTimeline.Pages.Routes
             }
         }
 
-        public async Task OnPostDeleteShape(int id)
+        public async Task OnPostDeleteShape(int shapeId)
         {
             try
             {
-                await _service.DeleteShapeById(id);
+                await _service.DeleteShapeById(shapeId);
             }
             catch (Exception ex)
             {

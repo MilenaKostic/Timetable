@@ -49,22 +49,28 @@
 	}).addTo(map);
 
 	var coordinates = [];
+	var markers = [];
 
 	@if(Model.RouteWithStop != null)
 	{
 		@for(int i=0; i<Model.RouteWithStop?.Stops.Count(); i++)
 		{
-			@:coordinates.push({ lat: "@Model.RouteWithStop.Stops[i].Stop.Lat.ToString().Replace(',','.')", lon: "@Model.RouteWithStop.Stops[i].Stop.Lon.ToString().Replace(',','.')" });
+			@:markers.push({ lat: "@Model.RouteWithStop.Stops[i].Stop.Lat.ToString().Replace(',','.')", lon: "@Model.RouteWithStop.Stops[i].Stop.Lon.ToString().Replace(',','.')" });
 		}
 	}
 
-	i=0; 
-	while (i < coordinates.length) {
-		console.log(coordinates[i]);
-		i++;
+	@if (Model.Shapes != null )
+	{
+		@for (int i = 0; i < Model.Shapes?.Count(); i++)
+		{
+			@:coordinates.push({ lat: "@Model.Shapes[i].Lat.ToString().Replace(',','.')", lon: "@Model.Shapes[i].Lon.ToString().Replace(',','.')" });
+		}
 	}
 
-	DrawPolyline = [];
+
+		for (var i = 0; i < markers.length; i++) {
+		var marker = L.marker([markers[i].lat, markers[i].lon]).addTo(map);
+	}
 
 	L.polyline(
 		[coordinates],

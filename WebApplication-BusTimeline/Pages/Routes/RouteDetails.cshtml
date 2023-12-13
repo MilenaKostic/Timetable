@@ -141,20 +141,39 @@
 		}).addTo(map);
 
 		var coordinates = [];
+		var markers = [];
 
-			@foreach (var r in Model?.RouteWithStops.Stops?.OrderBy(x => x.Rbr))
+
+			@if (Model.Shapes != null)
 			{
-			@:coordinates.push({ lat: "@r.Stop.Lat.ToString().Replace(',','.')", lon: "@r.Stop.Lon.ToString().Replace(',','.')" });
+				@for (int i = 0; i < Model.Shapes?.Count(); i++)
+				{
+					@:coordinates.push({ lat: "@Model.Shapes[i].Lat.ToString().Replace(',','.')", lon: "@Model.Shapes[i].Lon.ToString().Replace(',','.')" });
+				}
 			}
 
-		const polyline = new L.polyline(
-			[coordinates],
+			@if(Model.RouteWithStops.Stops != null)
 			{
-				color: "@Model.RouteWithStops.Color",
-				weight: 4,
-				opacity: 0.8,
-				smoothFactor: 1,
-			}).addTo(map);
+				@for(int i = 0; i<Model.RouteWithStops.Stops?.Count(); i++)
+				{
+					@:markers.push({ lat: "@Model.RouteWithStops.Stops[i].Stop.Lat.ToString().Replace(',','.')", lon: "@Model.RouteWithStops.Stops[i].Stop.Lon.ToString().Replace(',','.')" })
+				}
+			}
+
+
+			for (var i = 0; i < markers.length; i++) {
+				var marker = L.marker([markers[i].lat, markers[i].lon]).addTo(map);
+			}
+
+				L.polyline(
+					[coordinates],
+					{
+						color: 'red',
+						weight: 3,
+						opacity: 0.5,
+						smoothFactor: 1,
+					}).addTo(map);
+
 
 
 	</script>
@@ -162,4 +181,5 @@
 	</div>
 
 </div>
+
 

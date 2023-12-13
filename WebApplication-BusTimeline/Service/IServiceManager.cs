@@ -21,5 +21,8 @@ namespace WebApplication_BusTimeline.Service
 
 		Task<IEnumerable<ShapeDTO>> GetAllShape();
 		Task DeleteShapeById(int id); 
+
+		Task<IEnumerable<ShapeDTO>> GetShapeByRoute(int routeId);
+		Task CreateShape(ShapePostDTO shape);
 	}
 }

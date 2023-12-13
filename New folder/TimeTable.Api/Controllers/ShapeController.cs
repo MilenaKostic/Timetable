@@ -81,10 +81,12 @@ namespace TimeTable.Api.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CreateShape([FromBody] ShapePostDTO shape)
 		{
+			int? lastRbr = await _repository.Shape.GetLastRbrByRoute(shape.RouteId);
+
 			var ShapeEntity = new Shape()
 			{
 				RouteId = shape.RouteId,
-				RBr = shape.RBr,	
+				RBr = (lastRbr ?? 0)+1,	
 				Lat = shape.Lat,
 				Lon	= shape.Lon
 				
@@ -101,6 +103,24 @@ namespace TimeTable.Api.Controllers
 			};
 
 			return CreatedAtRoute("ShapeById", new { Id = shapebasic.Id }, shapebasic);
+		}
+
+		[HttpGet("GetShapeByRoute")]
+		public async Task<IActionResult> GetShapeByRoute(int routeId)
+		{
+			var shapes = await _repository.Shape.GetByRoute(routeId);
+
+			var shapesDTO = shapes.Select(x => new ShapeDTO()
+			{
+				Id = x.Id,
+				RouteId = x.RouteId,
+				RBr = x.RBr,
+				Lat = x.Lat,
+				Lon = x.Lon
+			
+			}).ToList();
+
+			return Ok(shapesDTO);
 		}
 
 	}

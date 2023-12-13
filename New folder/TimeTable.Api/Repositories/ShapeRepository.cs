@@ -29,5 +29,22 @@ namespace TimeTable.Api.Repositories
 		{
 			return await FindByCondition(x => x.Id == id, trackChanges).FirstOrDefaultAsync();
 		}
+
+		public async Task<IEnumerable<Shape>> GetByRoute(int routeId)
+		{
+			return await FindByCondition(x => x.RouteId == routeId, false).ToListAsync();
+		}
+
+
+		public async Task<int?> GetLastRbrByRoute(int routeId)
+		{
+			var rbr = await FindByCondition(x => x.RouteId == routeId, false).OrderByDescending(x => x.RBr).FirstOrDefaultAsync();
+
+			if(rbr == null)
+			{
+				return new int?();
+			}
+			return rbr.RBr; 
+		}
 	}
 }

@@ -43,6 +43,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		[BindProperty, DataType(DataType.Text)]
 		public string SelectRbr { get; set; }
 
+		public List<ShapeDTO> Shapes { get; set; }
+
 		public RouteDetailsModel(IServiceManager service)
 		{
 			_service = service;
@@ -57,6 +59,16 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			else
 			{
 				SelectRbr = StanicaRbr;
+			}
+
+			try
+			{
+				int _routeId = int.Parse(routeId);
+				Shapes = (await _service.GetShapeByRoute(_routeId)).ToList();
+			}
+			catch(Exception ex)
+			{
+				ErrorMessage = ex.Message; 
 			}
 
 			try 

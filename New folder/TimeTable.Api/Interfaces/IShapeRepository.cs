@@ -8,6 +8,8 @@ namespace TimeTable.Api.Interfaces
 		void CreateShape(Shape shape);
 		Task<Shape> GetById(int Id, Boolean trackChanges);
 		Task<IEnumerable<Shape>> GetAll();
+		Task<IEnumerable<Shape>> GetByRoute( int routeId);
+		Task <int?> GetLastRbrByRoute (int routeId);
 
 	}
 }

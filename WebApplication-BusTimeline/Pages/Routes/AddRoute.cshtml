@@ -36,6 +36,8 @@
 		<th>Id</th>
 		<th>Naziv</th>
 		</thead>
+		
+		<tbody>
 		@if(Model.Routes.Count != 0 )
 		{
 			@foreach (var s in Model?.Routes)
@@ -50,7 +52,7 @@
 			}
 			
 		}
-		
+		</tbody>
 
 	</table>
 </div>

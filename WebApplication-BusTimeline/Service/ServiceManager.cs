@@ -393,6 +393,58 @@ namespace WebApplication_BusTimeline.Service
 			}
 		}
 
+		public async Task<IEnumerable<ShapeDTO>> GetShapeByRoute(int routeId)
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, $"api/Shape/GetShapeByRoute?routeId={routeId}");
+
+				//request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				//var content = new StringContent("", null, "application/json");
+				//request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Lista tacaka u obliku je trenutno nedostupna, pokušajte kasnije");
+			}
+			
+		}
+
+		public async Task CreateShape(ShapePostDTO shape)
+		{
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Post, $"api/Shape");
+
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				
+
+				request.Content = JsonContent.Create(shape);
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				//var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
+				//	(await response.Content.ReadAsStreamAsync()),
+				//	new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				//return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Lista tacaka u obliku je trenutno nedostupna, pokušajte kasnije");
+			}
+		}
+
 
 
 	}

@@ -8,11 +8,11 @@
 
 
 
-<div style="float: left; width: 80%">
-		<div id="map" style="height: 600px;"></div>
+<div style="float: left; width: 70%">
+		<div id="map" style="height: 500px;"></div>
 </div>
 
-<div style="float: right; width:18%" class="flex-column">
+<div style="float: right; width:25%" class="flex-column">
 	<h4>Dodate tacke u rutu</h4>
 	<table class="table">
 		<thead class="table-primary">
@@ -25,7 +25,10 @@
 			</tr>
 		</thead>
 		<tbody class="table-secondary">
-
+		@if(Model.Shapes != null)
+		{
+				
+			
 			@foreach(var s in Model.Shapes)
 			{
 				<tr>
@@ -44,7 +47,7 @@
 				</tr>
 				
 			}
-			
+		}
 		</tbody>
 	</table>
 		
@@ -56,6 +59,8 @@
 	
 
 	<script>
+		RouteId = @Model.RouteId;
+
 		console.log("Start map");
 
 		var map = L.map('map').setView([44.968190, 19.608141], 16);
@@ -65,39 +70,98 @@
 
 
 		var coordinates = [];
-
+		var marker = null;
 
 
 		function onMapClick(e) {
-			
+
+		if (marker != null) {
+			map.removeLayer(marker);
+		}
 			console.log(e.latlng.lat);
 			console.log(e.latlng.lng);
 
 
 			marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
-			coordinates.push({ lat: e.latlng.lat, lon: e.latlng.lng });
+			//coordinates.push({ lat: e.latlng.lat, lon: e.latlng.lng });
 
-			console.log(coordinates); 
+			console.log(coordinates);
 
-		} 
+		post('https://localhost:7292/Routes/AddShape/', { id: RouteId, lat: e.latlng.lat, lon: e.latlng.lng });
+
+		}
+
+	@if (Model.Shapes != null)
+		{
+			@for (int i = 0; i < Model.Shapes?.Count(); i++)
+			{
+				@:coordinates.push({ lat: "@Model.Shapes[i].Lat.ToString().Replace(',','.')", lon: "@Model.Shapes[i].Lon.ToString().Replace(',','.')" });
+			}
+		}
+
+
+
+
+	L.polyline(
+		[coordinates],
+		{
+			color: 'red',
+			weight: 3,
+			opacity: 0.5,
+			smoothFactor: 1,
+		}).addTo(map);
 
 		map.on('click', onMapClick);
 
+	function post(path, params, method = 'get') {
+
+		// The rest of this code assumes you are not using a library.
+		// It can be made less verbose if you use one.
+		const form = document.createElement('form');
+		form.method = method;
+		form.action = path;
+
+		for (const key in params) {
+			if (params.hasOwnProperty(key)) {
+				const hiddenField = document.createElement('input');
+				hiddenField.type = 'hidden';
+				hiddenField.name = key;
+				hiddenField.value = params[key];
+
+				form.appendChild(hiddenField);
+			}
+		}
+
+		document.body.appendChild(form);
+		form.submit();
+	}
+
 	</script>
-	
+@* 	
+	// @if (Model.Shapes != null)
+	// {
+	// 	@for (int i = 0; i < Model.Shapes?.Count(); i++)
+	// 	{
+	// 		@:coordinates.push({ lat: "@Model.Shapes[i].Lat.ToString().Replace(',','.')", lon: "@Model.Shapes[i].Lon.ToString().Replace(',','.')" });
+	// 	}
+	// }
+
+	// 	i=0;
+	// while (i < coordinates.length) {
+	// 	console.log(coordinates[i]);
+	// 	i++;
+	// }
+
+
+	// var coordinates = [];
+
+	//DrawPolyline = [];
+ *@
+
+
 
 @* 
-	<input type="hidden" asp-for="lat" id="lat"/>
-	<input type="hidden" asp-for="lon" id="lon"/> *@
-
-@* 
-			document.getElementById("lat").value = e.latlng.lat;
-			document.getElementById("lon").value = e.latlng.lng;
-
-
-			document.getElementById("labelLat").innerHTML = e.latlng.lat;
-			document.getElementById("labelLon").innerHTML = e.latlng.lng; *@
-
-	
-
-
+	// @foreach (var s in Model.RouteWithStops.Stops)
+	// {
+	// 	@:marker = L.marker([s.lat, s.lon]);
+	// } *@
