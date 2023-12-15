@@ -5,12 +5,36 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			max-width: 1200px; 
+			margin: 0 auto;
+			padding: 5px;
+			box-sizing: border-box;
+		}
+
+
+
+	</style>
+	<title>Responsive Design Example</title>
+</head>
+
 
 <h3>Stanice</h3>
 
 @if(Model.LstStops?.Count > 0)
 {
-	<div class="row">
+	<div class="row"; style="margin:0">
 		<div class="col-4">
 
 			<table class="table">
@@ -47,7 +71,7 @@
 			
 				@if(Model.SelectedStop != null)
 				{
-				<div style="height:120px; background-color:#e2e3e5; border-bottom: 1px solid black" >
+				<div style="height:120px; width:1000px; background-color:#e2e3e5; border-bottom: 1px solid black" >
 					<div style="height:36px; background-color:#cfe2ff; border-bottom: 1px solid black">
 						<h3>Informacije:</h3>
 						
@@ -68,7 +92,7 @@
 				
 			}
 
-			<div id="map" style="height: 600px;"></div>
+			<div id="map" style="height: 600px; width:1000px"></div>
 
 		</div>
 
@@ -80,17 +104,22 @@
 			maxZoom: 19,
 		}).addTo(map);
 
+		function centerMapToMarker() {
+			var markerLatLng = marker.getLatLng();
+			map.setView(markerLatLng, 16);
+		}
+
 		@if (Model.SelectedStop != null)
 		{
-			@($"var marker = L.marker([{Model.SelectedStop.Lat.ToString().Replace(",", ".")},  {Model.SelectedStop.Lon.ToString().Replace(",", ".")}]).addTo(map)")
-			;
+			@($"var marker = L.marker([{Model.SelectedStop.Lat.ToString().Replace(",", ".")},  {Model.SelectedStop.Lon.ToString().Replace(",", ".")}]).addTo(map)");
+
+			
 		}
+
+			centerMapToMarker();
+
 	</script>
 }
 
-else
-{
-	//Poruka 
-}
 
 <a href="../Index">Home</a>

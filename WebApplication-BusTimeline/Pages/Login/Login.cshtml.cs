@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.DTO;
 using System.Text.Json.Serialization;
+using WebApplication_BusTimeline.Service;
 //using WebAPI.Data;
 //using WebAPI.Models;
 
@@ -13,6 +14,7 @@ namespace WebApplication_BusTimeline.Pages.Login
 {
     public class LoginModel : PageModel
     {
+        public IServiceManager _service;
 
         [BindProperty]
         public UserLoginDTO UserLoginDTO { get; set; }
@@ -22,8 +24,13 @@ namespace WebApplication_BusTimeline.Pages.Login
 
         public string? ErrorMessage { get; set; }
 
+        public LoginModel(IServiceManager service)
+        {
+            _service = service;
+        }
         public async Task OnGetAsync()
         {
+
         }
 
         public async Task<IActionResult> OnGetAsyncLogout()
@@ -36,37 +43,16 @@ namespace WebApplication_BusTimeline.Pages.Login
         {
 			if (userLoginDTO.Username != null && userLoginDTO.Password != null)
 			{
-				using (var httpClient = new HttpClient())
-				{
-					try
-					{
-						using (HttpResponseMessage response = await httpClient.GetAsync($"http://localhost:5099/api/User/{userLoginDTO.Username}"))
-						{
-							string apiResponse = await response.Content.ReadAsStringAsync();
-							var _user = (JsonConvert.DeserializeObject<UserLoginDTO>(apiResponse));
-
-							if (_user.Password == userLoginDTO.Password)
-							{
-								HttpContext.Session.SetString("username", UserLoginDTO.Username);
-								return RedirectToPage("../Index", new { UserLoginDTO.Username });
-							}
-							else
-							{
-								ErrorMessage = "Pogrešna šifra, pokušajte ponovo!";
-								return Page();
-							}
+                try
+                {
+                    await _service.Login(userLoginDTO);
 
 
-						}
-					}
-					catch (Exception e)
-					{
-						ErrorMessage = "Ne postoji korisnik sa ovim korisničkim imenom, registrujte se!";
-						return Page();
-
-					}
-
-				}
+                }
+                catch(Exception ex)
+                {
+                    ErrorMessage = ex.Message;
+                }
 
 
 			}

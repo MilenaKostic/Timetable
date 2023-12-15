@@ -24,5 +24,8 @@ namespace WebApplication_BusTimeline.Service
 
 		Task<IEnumerable<ShapeDTO>> GetShapeByRoute(int routeId);
 		Task CreateShape(ShapePostDTO shape);
-	}
+
+		Task Login(UserLoginDTO userLoginDTO);
+
+    }
 }

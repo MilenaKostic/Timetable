@@ -2,6 +2,27 @@
 @model MapModel
 @{
 }
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 5px;
+			box-sizing: border-box;
+		}
+
+	</style>
+	<title>Responsive Design Example</title>
+</head>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -43,10 +64,15 @@
 
 
 <script>
-	var map = L.map('map').setView([44.968190, 19.608141], 12);
+	var map = L.map('map').setView([44.977300, 19.611058], 15);
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 	}).addTo(map);
+
+	function centerMapToMarker() {
+		var markerLatLng = marker.getLatLng();
+		map.setView(markerLatLng, 16);
+	}
 
 	var coordinates = [];
 	var markers = [];
@@ -72,7 +98,7 @@
 		var marker = L.marker([markers[i].lat, markers[i].lon]).addTo(map);
 	}
 
-	L.polyline(
+	var busRoute = L.polyline(
 		[coordinates],
 		{
 			color: 'red',
@@ -81,6 +107,7 @@
 			smoothFactor: 1,
 		}).addTo(map);
 
+	map.fitBounds(busRoute.getBounds());
 
 </script>
 

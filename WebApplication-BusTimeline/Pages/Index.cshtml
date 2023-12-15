@@ -2,15 +2,49 @@
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
 
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			background-color: #e8d9d8;
+		}
+
+		.container {
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 5px;
+			box-sizing: border-box;
+		}
+
+	</style>
+	<title>Responsive Design Example</title>
+</head>
+
 
 <div class="text-center">
-    <h1 class="display-4">Dobrodošli @Model.Username </h1> 
 
+	@* <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Sremska_Mitrovica%2C_autobus_Sirmiumbus.jpg/2560px-Sremska_Mitrovica%2C_autobus_Sirmiumbus.jpg" alt="Slika stanice" style="width:1400px" />
+ *@
     @if(Model.Username != null)
     {
         <a asp-page="Index" asp-page-handler="Logout">Logout</a>
     }
-    
+
+    @if (User.Identity.IsAuthenticated)
+    {
+		<h1 style="position: absolute; top:50%; left:50%; font-size:70px">Dobrodošli @User.Identity.Name!</h1>
+    }
+    else
+    {
+		<h1 style="position: absolute; top:50%; left:50%; font-size:70px">Dobrodošli !</h1>
+        
+    }
+
     
     @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>

@@ -445,7 +445,30 @@ namespace WebApplication_BusTimeline.Service
 			}
 		}
 
+		public async Task Login(UserLoginDTO userLoginDTO)
+		{
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, $"login");
 
+                request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+                var content = new StringContent("", null, "application/json");
+                request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                //var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
+                //    (await response.Content.ReadAsStreamAsync()),
+                //    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+               
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Lista tacaka u obliku je trenutno nedostupna, pokušajte kasnije");
+            }
+        }
 
 	}
 	

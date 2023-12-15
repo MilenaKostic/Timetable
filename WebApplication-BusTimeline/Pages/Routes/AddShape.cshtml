@@ -1,5 +1,7 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authorization;
 @model WebApplication_BusTimeline.Pages.Routes.AddShapeModel
+@attribute [Authorize(Roles = "Admin")]
 @{
 }
 
@@ -103,7 +105,7 @@
 
 
 	L.polyline(
-		[coordinates],
+		coordinates,
 		{
 			color: 'red',
 			weight: 3,

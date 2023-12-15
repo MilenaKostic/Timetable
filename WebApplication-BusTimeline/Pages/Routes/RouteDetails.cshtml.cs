@@ -75,6 +75,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				int routeID = Int32.Parse(routeId);
 				RouteWithStops = await _service.GetRouteWithStops(routeID);
+
 				LastRBr = RouteWithStops.Stops.Max(x => x.Rbr); 
 			}
 			catch(Exception e)

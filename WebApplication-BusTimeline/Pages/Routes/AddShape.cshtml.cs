@@ -24,18 +24,22 @@ namespace WebApplication_BusTimeline.Pages.Routes
             RouteId = id;
             try
             {
-                if(lat !=  0 && lon != 0)
+				Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();
+
+				if (lat !=  0 && lon != 0)
                 {
                     var createShape = new ShapePostDTO()
                     {
                         RouteId = RouteId,
                         Lat = lat,
-                        Lon = lon
+                        Lon = lon,
+                        RBr = Shapes.Count + 1
                     };
 
                     await _service.CreateShape(createShape);
-                }
-                Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();
+					
+				}
+
 
                // RouteWithStops = await _service.GetRouteWithStops(id);
             }
@@ -58,7 +62,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 
 			try
 			{
-				Shapes = (await _service.GetAllShape()).ToList();
+				Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();
 			}
 			catch (Exception ex)
 			{

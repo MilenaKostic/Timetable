@@ -17,9 +17,14 @@ namespace TimeTable.Api.Repositories
 		{
 			return await FindAll(false).ToListAsync();
 		}
-		public async Task<RouteStop> GetByRouteId(int Id, Boolean trackChanges)
+		public async Task<IEnumerable<RouteStop>> GetByRouteId(int Id, Boolean trackChanges)
 		{
-			return await FindByCondition(x => x.Route.Id == Id, trackChanges).FirstOrDefaultAsync();
+
+			var stopsOnRoute = await FindByCondition(x => x.RouteId == Id, false).ToListAsync();
+			var orderedStopsOnRoute = stopsOnRoute.OrderBy(x => x.Rbr);
+
+			return orderedStopsOnRoute.ToList();
+						 //FindByCondition(x => x.Route.Id == Id).ToList();
 		}
 		public async Task<RouteStop> GetById(int Id, Boolean trackChanges)
 		{
@@ -29,5 +34,13 @@ namespace TimeTable.Api.Repositories
 		{
 			Delete(routestop);
 		}
+
+		//public async Task<IEnumerable<RouteStop>> GetByRouteIdList(int Id)
+		//{
+		//	var routeStops = await GetAll();
+		//	var stopsOnRoute =  routeStops.Where(s => s.Route.Id == Id).ToList();
+
+		//	return stopsOnRoute;
+		//}
 	}
 }

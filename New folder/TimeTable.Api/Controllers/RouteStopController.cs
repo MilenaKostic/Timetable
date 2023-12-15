@@ -6,6 +6,7 @@ using Shared.DTO;
 using TimeTable.Api.Entities.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace TimeTable.Api.Controllers
 {
@@ -97,12 +98,26 @@ namespace TimeTable.Api.Controllers
 		{
 			var rEntity = await _repository.RouteStop.GetById(id, true);
 
+			var stopsOnRoute = await _repository.RouteStop.GetByRouteId(id, false);
+
+			List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+
 			if (rEntity == null)
 			{
 				return NotFound();
 			}
 
+			for (int i = rEntity.Rbr; i < stopsOnRouteList?.Count; i++)
+			{
+				stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr - 1;
+			}
+
 			_repository.RouteStop.DeleteRouteStop(rEntity);
+
+
+
+
+
 
 			await _repository.SaveAsync();
 
@@ -112,27 +127,166 @@ namespace TimeTable.Api.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CreateRouteStop([FromBody] RouteStopPostDTO routeStop)
 		{
-			var RouteStopEntity = new RouteStop()
+			switch (routeStop.PositionId)
 			{
-				RouteId = routeStop.RouteId,
-				StopId = routeStop.StopId,
-				TimeInterval = routeStop.TimeInterval,
-				MetarDistance = routeStop.MetarDistance,				
+				case 1:
+					{
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
 
-			};
+						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
 
-			_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+						for (int i = 0; i < stopsOnRouteList?.Count; i++)
+						{
+							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+						}
 
-			await _repository.SaveAsync();
+						stopsOnRoute = stopsOnRouteList;
 
-			var routestopbasic = new RouteStopBasicDTO()
-			{
-				Id = RouteStopEntity.Id,
-				Rbr = RouteStopEntity.Rbr
 
-			};
+						var RouteStopEntity = new RouteStop()
+						{
+							RouteId = routeStop.RouteId,
+							Rbr = 1,
+							StopId = routeStop.StopId,
+							TimeInterval = routeStop.TimeInterval,
+							MetarDistance = routeStop.MetarDistance,
 
-			return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+						};
+
+						_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+
+						await _repository.SaveAsync();
+
+						var routestopbasic = new RouteStopBasicDTO()
+						{
+							Id = RouteStopEntity.Id,
+							Rbr = RouteStopEntity.Rbr
+
+						};
+
+						return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+
+					}
+
+				case 2:
+					{
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+
+						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+
+						var _selRbr = routeStop.SelectRbr ?? 0;
+
+						for (int i = routeStop.SelectRbr.Value ; i < stopsOnRouteList?.Count; i++)
+						{
+							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+						}
+
+
+						var RouteStopEntity = new RouteStop()
+						{
+							RouteId = routeStop.RouteId,
+							Rbr = _selRbr,
+							StopId = routeStop.StopId,
+							TimeInterval = routeStop.TimeInterval,
+							MetarDistance = routeStop.MetarDistance,
+
+						};
+
+						_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+
+						await _repository.SaveAsync();
+
+						var routestopbasic = new RouteStopBasicDTO()
+						{
+							Id = RouteStopEntity.Id,
+							Rbr = RouteStopEntity.Rbr
+
+						};
+
+						return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+
+					}
+
+					break;
+
+				case 3:
+					{
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+
+						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+
+						var _selRbr = routeStop.SelectRbr ?? 0;
+
+						for (int i = routeStop.SelectRbr.Value ; i < stopsOnRouteList?.Count; i++)
+						{
+							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+						}
+
+
+						var RouteStopEntity = new RouteStop()
+						{
+							RouteId = routeStop.RouteId,
+							Rbr = _selRbr+1,
+							StopId = routeStop.StopId,
+							TimeInterval = routeStop.TimeInterval,
+							MetarDistance = routeStop.MetarDistance,
+
+						};
+
+						_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+
+						await _repository.SaveAsync();
+
+						var routestopbasic = new RouteStopBasicDTO()
+						{
+							Id = RouteStopEntity.Id,
+							Rbr = RouteStopEntity.Rbr
+
+						};
+
+						return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+
+					}
+
+				case 4:
+					{
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+
+						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+						var broj = stopsOnRouteList.Count;
+
+						var _selRbr = routeStop.SelectRbr ?? 0;
+
+						var RouteStopEntity = new RouteStop()
+						{
+							RouteId = routeStop.RouteId,
+							Rbr = broj +1,
+							StopId = routeStop.StopId,
+							TimeInterval = routeStop.TimeInterval,
+							MetarDistance = routeStop.MetarDistance,
+
+						};
+
+						_repository.RouteStop.CreateRouteStop(RouteStopEntity);
+
+						await _repository.SaveAsync();
+
+						var routestopbasic = new RouteStopBasicDTO()
+						{
+							Id = RouteStopEntity.Id,
+							Rbr = RouteStopEntity.Rbr
+
+						};
+
+						return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+
+					}
+
+
+			}
+			return BadRequest();
+
+			
 		}
 
 
