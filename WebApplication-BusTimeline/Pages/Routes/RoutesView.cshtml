@@ -76,6 +76,16 @@
 
 	var coordinates = [];
 	var markers = [];
+	var circles = [];
+
+	@if(Model.Crossroads != null)
+	{
+		for(int i=0; i<Model.Crossroads?.Count(); i++)
+		{
+			@:circles.push({ lat: "@Model.Crossroads[i].Lat.ToString().Replace(',','.')", lon: "@Model.Crossroads[i].Lon.ToString().Replace(',','.')" });
+		}
+
+	}
 
 	@if(Model.RouteWithStop != null)
 	{
@@ -90,9 +100,11 @@
 		@for (int i = 0; i < Model.Shapes?.Count(); i++)
 		{
 			@:coordinates.push({ lat: "@Model.Shapes[i].Lat.ToString().Replace(',','.')", lon: "@Model.Shapes[i].Lon.ToString().Replace(',','.')" });
+	
 		}
 	}
 
+		//console.log(circles);
 
 		for (var i = 0; i < markers.length; i++) {
 		var marker = L.marker([markers[i].lat, markers[i].lon]).addTo(map);
@@ -106,6 +118,20 @@
 			opacity: 0.5,
 			smoothFactor: 1,
 		}).addTo(map);
+
+
+	for (var i = 0; i < circles.length; i++) {
+		var randomOpacity = Math.random();
+		var circle = L.circle([circles[i].lat, circles[i].lon], {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: randomOpacity,
+			radius: 65
+		}).addTo(map);
+
+	}
+	
+
 
 	map.fitBounds(busRoute.getBounds());
 

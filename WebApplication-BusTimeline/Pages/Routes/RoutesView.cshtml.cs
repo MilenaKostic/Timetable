@@ -20,6 +20,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public List<StopDTO> Stops { get; set; }
 		public List<ShapeDTO> Shapes { get; set; }
 
+		public List<CrossroadDTO> Crossroads { get; set; }
+
 		public List<RouteGetBasicDTO> Routes { get; set; }
 		public RouteWithStopsDTO RouteWithStop { get; set; }
 
@@ -46,6 +48,7 @@ namespace WebApplication_BusTimeline.Pages.Routes
 			{
 				if(int.TryParse(routeId, out RouteId))
 				{
+					Crossroads = (await _service.GetAllCrossroads()).ToList();
 					RouteWithStop = await _service.GetRouteWithStops(RouteId);
 				}
 				RouteId = int.Parse(routeId);

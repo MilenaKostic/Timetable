@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarPostDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\Calendar\CalendarPutDTO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DTO\Crossroad\CrossroadDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\RouteStop\RouteStopGetDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\RouteStop\RouteStopListDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DTO\RouteStop\RouteStopBasicDTO.cs" />

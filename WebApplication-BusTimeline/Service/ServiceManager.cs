@@ -451,6 +451,58 @@ namespace WebApplication_BusTimeline.Service
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, $"login");
 
+                //request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+                //var content = new StringContent("", null, "application/json");
+                //request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+
+			}
+            catch (Exception e)
+            {
+                throw new Exception("Grešta, neispravni podaci");
+            }
+        }
+
+		public async Task<UserDTO> GetUserByUsername(string username)
+		{
+
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, $"api/User/{username}");
+
+				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+				var content = new StringContent("", null, "application/json");
+				request.Content = content;
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<UserDTO>(
+					(await response.Content.ReadAsStreamAsync()),
+					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+				return _d;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Neispravnan username ili password");
+			}
+		}
+
+
+        public async Task<IEnumerable<CrossroadDTO>> GetAllCrossroads()
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"api/Crossroad");
+
                 request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
                 var content = new StringContent("", null, "application/json");
                 request.Content = content;
@@ -458,18 +510,18 @@ namespace WebApplication_BusTimeline.Service
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
-                //var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
-                //    (await response.Content.ReadAsStreamAsync()),
-                //    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<CrossroadDTO>>(
+                    (await response.Content.ReadAsStreamAsync()),
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-               
+                return _d;
             }
             catch (Exception e)
             {
-                throw new Exception("Lista tacaka u obliku je trenutno nedostupna, pokušajte kasnije");
+                throw new Exception("Lista raskrsnica je trenutno nedostupna, pokušajte kasnije");
             }
         }
 
-	}
+    }
 	
 }

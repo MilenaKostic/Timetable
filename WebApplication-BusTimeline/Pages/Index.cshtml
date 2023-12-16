@@ -21,6 +21,28 @@
 			box-sizing: border-box;
 		}
 
+
+		#animatedElement {
+			position: absolute;
+			top: 50%;
+			left: 10%;
+			animation: moveAnimation 2s linear forwards;
+			transform-origin: center center;
+		}
+
+		@@keyframes moveAnimation {
+			from {
+				transform: translateX(0);
+			}
+
+			to {
+				transform: translateX(80%); 
+			}
+		}
+    }
+
+
+
 	</style>
 	<title>Responsive Design Example</title>
 </head>
@@ -28,23 +50,23 @@
 
 <div class="text-center">
 
-	@* <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Sremska_Mitrovica%2C_autobus_Sirmiumbus.jpg/2560px-Sremska_Mitrovica%2C_autobus_Sirmiumbus.jpg" alt="Slika stanice" style="width:1400px" />
- *@
-    @if(Model.Username != null)
-    {
-        <a asp-page="Index" asp-page-handler="Logout">Logout</a>
-    }
+	<h1 style="position: absolute; top:50%; left:40%; font-size:70px">Dobrodošli !</h1>
 
-    @if (User.Identity.IsAuthenticated)
-    {
-		<h1 style="position: absolute; top:50%; left:50%; font-size:70px">Dobrodošli @User.Identity.Name!</h1>
-    }
-    else
-    {
-		<h1 style="position: absolute; top:50%; left:50%; font-size:70px">Dobrodošli !</h1>
-        
-    }
+	<svg id="animatedElement" 
+		style="position: absolute; top:50%; left:10%;" width="255px" height="255px" viewBox="0 -2.03 20.051 20.051" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="bus-2" transform="translate(-2 -4)"> <path id="secondary" fill="#2ca9bc" d="M21,11H3v5a1,1,0,0,0,1,1H5a2,2,0,0,1,4,0h6a2,2,0,0,1,4,0h1a1,1,0,0,0,1-1V11Z"></path> <path id="primary" d="M4.93,17H4a1,1,0,0,1-1-1V6A1,1,0,0,1,4,5H18.28a1,1,0,0,1,.95.68L21,10.85a1.06,1.06,0,0,1,.05.31V16a1,1,0,0,1-1,1h-.9" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path> <path id="primary-2" data-name="primary" d="M14.94,17H9.12m11.8-6H3M15,5v6M7,15a2,2,0,1,0,2,2A2,2,0,0,0,7,15Zm10,0a2,2,0,1,0,2,2A2,2,0,0,0,17,15Z" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path> </g> </g></svg>
+
+
 
     
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
 </div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		startAnimation();
+	});
+
+	function startAnimation() {
+		var animatedElement = document.getElementById('animatedElement');
+		animatedElement.style.animation = 'moveAnimation 2s linear forwards';
+	}
+</script>

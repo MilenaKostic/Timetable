@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication_BusTimeline.Service; 
 
@@ -31,10 +33,27 @@ builder.Services.AddScoped(sp => new HttpClient
 	BaseAddress = new Uri(webApiAddress),
 });
 
-builder.Services.AddAuthorization(options =>
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Amin"));
+//});
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
 {
-    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Amin"));
+	// This lambda determines whether user consent for non-essential cookies is needed for a given request.
+	options.CheckConsentNeeded = context => true;
+	options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(cookieOptions =>
+{
+	cookieOptions.LoginPath = "/";
+});
+
+builder.Services.AddMvc().AddRazorPagesOptions(options =>
+{
+	options.Conventions.AuthorizeFolder("/admin");
+}).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 var app = builder.Build();
 
@@ -47,6 +66,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

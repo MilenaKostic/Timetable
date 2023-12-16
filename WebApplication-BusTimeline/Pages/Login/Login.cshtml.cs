@@ -1,62 +1,98 @@
 ﻿using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.DTO;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
+using WebApplication_BusTimeline.Models;
 using WebApplication_BusTimeline.Service;
-//using WebAPI.Data;
-//using WebAPI.Models;
+using System;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WebApplication_BusTimeline.Pages.Login
 {
     public class LoginModel : PageModel
     {
+        //private readonly IConfiguration configuration;
         public IServiceManager _service;
 
         [BindProperty]
         public UserLoginDTO UserLoginDTO { get; set; }
 
+        [BindProperty]
         public string Username { get; set; }
-        public string Password { get; set; }
+		[BindProperty, DataType(DataType.Password)]
+		public string Password { get; set; }
 
         public string? ErrorMessage { get; set; }
 
+        public UserDTO userCheck { get; set; }
+
+        //public LoginModel(IConfiguration configuration)
+        //{
+        //    this.configuration = configuration;
+        //}
         public LoginModel(IServiceManager service)
         {
-            _service = service;
+            _service = service; 
         }
         public async Task OnGetAsync()
         {
 
         }
 
-        public async Task<IActionResult> OnGetAsyncLogout()
-        {
-			HttpContext.Session.Remove("username");
-			return Page();
-        }
 
-        public async Task<IActionResult> OnPostAsync(UserLoginDTO userLoginDTO)
+        public async Task<IActionResult> OnPostAsync()
         {
-			if (userLoginDTO.Username != null && userLoginDTO.Password != null)
-			{
+            // var user = configuration.GetSection("SiteUser").Get<SiteUser>();
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(Password));
+                string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+
+
+                UserLoginDTO userInput = new UserLoginDTO() { Username = Username, Password = hashedPassword };
+
                 try
                 {
-                    await _service.Login(userLoginDTO);
+                    userCheck = await _service.GetUserByUsername(Username);
+                    if (userCheck.Password == userInput.Password)
+                    {
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, Username)
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                        return RedirectToPage("/Routes/AddRoute");
+
+                    }
+                    else
+                    {
+                        ErrorMessage = "Neispravnan username ili password";
+                    }
+
 
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    ErrorMessage = ex.Message;
-                }
+                    ErrorMessage = "Neispravnan username ili password";
 
+				}
+            }
 
-			}
-			return Page();
+            return Page();
 		}
 
     }

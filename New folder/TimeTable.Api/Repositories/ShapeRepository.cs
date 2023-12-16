@@ -46,5 +46,10 @@ namespace TimeTable.Api.Repositories
 			}
 			return rbr.RBr; 
 		}
+
+		public async Task<IEnumerable<Shape>> GetGreatRbrRoute(int routeId, int rbr)
+		{
+			return await FindByCondition(x => x.RouteId == routeId && x.RBr > rbr, true).ToListAsync();
+		}
 	}
 }

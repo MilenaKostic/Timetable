@@ -10,6 +10,7 @@ namespace TimeTable.Api.Interfaces
 		Task<IEnumerable<Shape>> GetAll();
 		Task<IEnumerable<Shape>> GetByRoute( int routeId);
 		Task <int?> GetLastRbrByRoute (int routeId);
+		Task<IEnumerable<Shape>> GetGreatRbrRoute(int routeId, int rbr);
 
 	}
 }

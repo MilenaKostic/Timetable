@@ -70,7 +70,14 @@ namespace TimeTable.Api.Controllers
 				return NotFound();
 			}
 
+			var shapesGreaterThenRbr = await _repository.Shape.GetGreatRbrRoute(rEntity.RouteId, rEntity.RBr);
+
 			_repository.Shape.DeleteShape(rEntity);
+
+			foreach(var shape in shapesGreaterThenRbr)
+			{
+				shape.RBr = shape.RBr - 1; 
+			}
 
 			await _repository.SaveAsync();
 

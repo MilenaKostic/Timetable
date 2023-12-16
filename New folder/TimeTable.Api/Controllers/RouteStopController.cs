@@ -98,27 +98,22 @@ namespace TimeTable.Api.Controllers
 		{
 			var rEntity = await _repository.RouteStop.GetById(id, true);
 
-			var stopsOnRoute = await _repository.RouteStop.GetByRouteId(id, false);
-
-			List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
-
 			if (rEntity == null)
 			{
 				return NotFound();
 			}
 
-			for (int i = rEntity.Rbr; i < stopsOnRouteList?.Count; i++)
+			var stopsOnRoute = await _repository.RouteStop.GetByRouteId(rEntity.RouteId, true);
+
+			var routeStopsGreater = await _repository.RouteStop.GetGreatRbrRoute(rEntity.RouteId, rEntity.Rbr);
+
+			foreach (var r in routeStopsGreater)
 			{
-				stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr - 1;
+				r.Rbr = r.Rbr -1;
 			}
 
+
 			_repository.RouteStop.DeleteRouteStop(rEntity);
-
-
-
-
-
-
 			await _repository.SaveAsync();
 
 			return NoContent();
@@ -131,17 +126,16 @@ namespace TimeTable.Api.Controllers
 			{
 				case 1:
 					{
-						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, true);
 
-						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+						var routeStopsGreater = await _repository.RouteStop.GetGreatRbrRoute(routeStop.RouteId, 1);
 
-						for (int i = 0; i < stopsOnRouteList?.Count; i++)
+						foreach(var r in routeStopsGreater)
 						{
-							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+							r.Rbr = r.Rbr + 1; 
 						}
 
-						stopsOnRoute = stopsOnRouteList;
-
+						await _repository.SaveAsync();
 
 						var RouteStopEntity = new RouteStop()
 						{
@@ -170,22 +164,23 @@ namespace TimeTable.Api.Controllers
 
 				case 2:
 					{
-						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, true);
 
-						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+						var routeStopsGreater = await _repository.RouteStop.GetGreatRbrRoute(routeStop.RouteId, routeStop.SelectRbr.Value);
 
 						var _selRbr = routeStop.SelectRbr ?? 0;
 
-						for (int i = routeStop.SelectRbr.Value ; i < stopsOnRouteList?.Count; i++)
+						foreach (var r in routeStopsGreater)
 						{
-							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+							r.Rbr = r.Rbr + 1;
 						}
 
+						await _repository.SaveAsync();
 
 						var RouteStopEntity = new RouteStop()
 						{
 							RouteId = routeStop.RouteId,
-							Rbr = _selRbr,
+							Rbr = _selRbr ,
 							StopId = routeStop.StopId,
 							TimeInterval = routeStop.TimeInterval,
 							MetarDistance = routeStop.MetarDistance,
@@ -207,26 +202,26 @@ namespace TimeTable.Api.Controllers
 
 					}
 
-					break;
 
 				case 3:
 					{
-						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, false);
+						var stopsOnRoute = await _repository.RouteStop.GetByRouteId(routeStop.RouteId, true);
 
-						List<RouteStop> stopsOnRouteList = stopsOnRoute.ToList();
+						var routeStopsGreater = await _repository.RouteStop.GetGreatRbrRoute(routeStop.RouteId, routeStop.SelectRbr.Value+1);
 
 						var _selRbr = routeStop.SelectRbr ?? 0;
 
-						for (int i = routeStop.SelectRbr.Value ; i < stopsOnRouteList?.Count; i++)
+						foreach (var r in routeStopsGreater)
 						{
-							stopsOnRouteList[i].Rbr = stopsOnRouteList[i].Rbr + 1;
+							r.Rbr = r.Rbr + 1;
 						}
 
+						await _repository.SaveAsync();
 
 						var RouteStopEntity = new RouteStop()
 						{
 							RouteId = routeStop.RouteId,
-							Rbr = _selRbr+1,
+							Rbr = _selRbr + 1,
 							StopId = routeStop.StopId,
 							TimeInterval = routeStop.TimeInterval,
 							MetarDistance = routeStop.MetarDistance,
@@ -245,6 +240,7 @@ namespace TimeTable.Api.Controllers
 						};
 
 						return CreatedAtRoute("RouteStopById", new { Id = routestopbasic.Id }, routestopbasic);
+
 
 					}
 

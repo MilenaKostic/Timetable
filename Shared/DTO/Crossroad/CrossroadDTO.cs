@@ -4,10 +4,11 @@ using System.Text;
 
 namespace Shared.DTO
 {
-	public class ShapePostDTO
+	public class CrossroadDTO
 	{
-		public int RouteId { get; set; }
+		public int Id {  get; set; }
+		public string Name { get; set; }
 		public double Lat { get; set; }
-		public double Lon { get; set; }
+		public double Lon { get; set; }	
 	}
 }

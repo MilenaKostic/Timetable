@@ -26,6 +26,8 @@ namespace WebApplication_BusTimeline.Service
 		Task CreateShape(ShapePostDTO shape);
 
 		Task Login(UserLoginDTO userLoginDTO);
+		Task<UserDTO> GetUserByUsername(string username);
+		Task<IEnumerable<CrossroadDTO>> GetAllCrossroads();
 
     }
 }

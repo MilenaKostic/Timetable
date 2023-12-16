@@ -1,4 +1,5 @@
 using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,9 +9,11 @@ using WebApplication_BusTimeline.Service;
 //using WebAPI.Models;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
+
 public class RoutesView2Model : PageModel
 {
-    public IServiceManager _service;
+	
+	public IServiceManager _service;
     public List<RouteGetBasicDTO> Routes { get; set; }
 
     public string? ErrorMessage { get; set; }

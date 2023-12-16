@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -11,7 +12,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApplication_BusTimeline.Pages.Stops
 {
-    public class AddStopsModel : PageModel
+	public class AddStopsModel : PageModel
     {
 		public IServiceManager _service;
 		public string? ErrorMessage {  get; set; }

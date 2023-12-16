@@ -35,12 +35,9 @@ namespace TimeTable.Api.Repositories
 			Delete(routestop);
 		}
 
-		//public async Task<IEnumerable<RouteStop>> GetByRouteIdList(int Id)
-		//{
-		//	var routeStops = await GetAll();
-		//	var stopsOnRoute =  routeStops.Where(s => s.Route.Id == Id).ToList();
-
-		//	return stopsOnRoute;
-		//}
+		public async Task<IEnumerable<RouteStop>> GetGreatRbrRoute(int routeId, int rbr)
+		{
+			return await FindByCondition(x => x.RouteId == routeId && x.Rbr >= rbr, true).ToListAsync();
+		}
 	}
 }

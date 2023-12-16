@@ -4,22 +4,44 @@
 @{
     ViewData["Title"] = "Login";
 }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+    </style>
+    <title>Responsive Design Example</title>
+</head>
+
 
 <div class="mb-4" >
     <div class="container border">
- 
-    <h2>Login</h2>
+        <h2>Login</h2>
+        
     <form method="post">
         <div class="mb-2">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" asp-for="@Model.UserLoginDTO.Username" required>
+            <label asp-for="Username">UserName:</label>
+            <input type="text" id="username" name="username" asp-for="Username" required>
         </div>
         <div class="mb-2">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" asp-for="@Model.UserLoginDTO.Password" required>
+            <label asp-for="Password">Password:</label>
+            <input type="password" id="password" name="password" asp-for="Password" required>
         </div>
         <div class="mb-4">
-            <button type="submit" >Login</button>
+            <button type="submit" >Log in</button>
         </div>  
         @if(Model.ErrorMessage != null)
         {
@@ -31,4 +53,4 @@
     </div>
 </div>
 
-<a href="../Register/Register">Novi u našoj aplikaciji, registrujte se!</a>
+@* <a href="../Register/Register">Novi u našoj aplikaciji, registrujte se!</a> *@
