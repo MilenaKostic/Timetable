@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
 
+[Authorize]
 public class RouteDetailsModel : PageModel
 {
 	public IServiceManager _service;

@@ -7,7 +7,8 @@ using WebApplication_BusTimeline.Service;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
 
-	public class AddShapeModel : PageModel
+[Authorize]
+public class AddShapeModel : PageModel
 {
     public IServiceManager _service;
     public string ErrorMessage { get; set; }

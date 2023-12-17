@@ -10,7 +10,8 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
 
-    public class AddRouteModel : PageModel
+[Authorize]
+	public class AddRouteModel : PageModel
     {
 	public IServiceManager _service;
         public List<RouteGetBasicDTO> Routes { get; set; }

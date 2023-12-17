@@ -25,6 +25,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 		public List<RouteGetBasicDTO> Routes { get; set; }
 		public RouteWithStopsDTO RouteWithStop { get; set; }
 
+		public int BrStops {  get; set; }
+
 		public MapModel(IServiceManager service)
 		{
 			_service = service;
@@ -50,6 +52,8 @@ namespace WebApplication_BusTimeline.Pages.Routes
 				{
 					Crossroads = (await _service.GetAllCrossroads()).ToList();
 					RouteWithStop = await _service.GetRouteWithStops(RouteId);
+					BrStops = RouteWithStop.Stops.Count;
+
 				}
 				RouteId = int.Parse(routeId);
 				Shapes = (await _service.GetShapeByRoute(RouteId)).ToList();

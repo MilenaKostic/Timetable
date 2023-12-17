@@ -26,7 +26,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Routes/RoutesView">Rute</a>
                         </li>
-              
+                        @if (User.Identity.IsAuthenticated)
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Routes/RoutesView2">Rute Admin</a>
                             </li>
@@ -36,8 +37,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Stops/AddStops">Dodaj stanicu Admin</a>
                             </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
+                        
                         }
 
                         <li class="nav-item">

@@ -10,6 +10,7 @@ using WebApplication_BusTimeline.Service;
 
 namespace WebApplication_BusTimeline.Pages.Routes;
 
+[Authorize]
 public class RoutesView2Model : PageModel
 {
 	

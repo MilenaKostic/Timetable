@@ -12,6 +12,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApplication_BusTimeline.Pages.Stops
 {
+	[Authorize]
 	public class AddStopsModel : PageModel
     {
 		public IServiceManager _service;

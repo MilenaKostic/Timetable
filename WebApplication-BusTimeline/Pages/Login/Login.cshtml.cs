@@ -1,19 +1,11 @@
-﻿using FluentAssertions.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Shared.DTO;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
-using WebApplication_BusTimeline.Models;
 using WebApplication_BusTimeline.Service;
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -23,6 +15,7 @@ namespace WebApplication_BusTimeline.Pages.Login
     {
         //private readonly IConfiguration configuration;
         public IServiceManager _service;
+       // public IAuthenticationService authservice;
 
         [BindProperty]
         public UserLoginDTO UserLoginDTO { get; set; }
@@ -42,7 +35,7 @@ namespace WebApplication_BusTimeline.Pages.Login
         //}
         public LoginModel(IServiceManager service)
         {
-            _service = service; 
+            _service = service;
         }
         public async Task OnGetAsync()
         {
@@ -65,7 +58,8 @@ namespace WebApplication_BusTimeline.Pages.Login
                 try
                 {
                     userCheck = await _service.GetUserByUsername(Username);
-                    if (userCheck.Password == userInput.Password)
+
+					if (userCheck.Password == userInput.Password)
                     {
                         var claims = new List<Claim>
                         {

@@ -5,7 +5,7 @@ namespace TimeTable.Api.Service;
 public interface IAuthenticationService
 {
 	Task<IdentityResult> RegisterUser(UserForRegistrationDTO userForRegistration);
-	Task<bool> ValidateUser(UserForAuthenticationDTO userForAuth);
+	public Task<bool> ValidateUser(UserForAuthenticationDTO userForAuth);
 	Task<TokenDto> CreateToken(bool populateExp);
 	Task<TokenDto> RefreshToken(TokenDto tokenDto);
 }
