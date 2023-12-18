@@ -45,7 +45,6 @@ namespace WebApplication_BusTimeline.Pages.Login
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // var user = configuration.GetSection("SiteUser").Get<SiteUser>();
 
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -68,7 +67,7 @@ namespace WebApplication_BusTimeline.Pages.Login
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                        return RedirectToPage("/Routes/AddRoute");
+                        return RedirectToPage("../Index");
 
                     }
                     else

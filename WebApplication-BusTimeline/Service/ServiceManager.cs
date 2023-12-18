@@ -445,37 +445,14 @@ namespace WebApplication_BusTimeline.Service
 			}
 		}
 
-		public async Task Login(UserLoginDTO userLoginDTO)
-		{
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Post, $"login");
 
-                //request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
-                //var content = new StringContent("", null, "application/json");
-                //request.Content = content;
-
-                var response = await _httpClient.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-
-				var _d = await System.Text.Json.JsonSerializer.DeserializeAsync<IEnumerable<ShapeDTO>>(
-					(await response.Content.ReadAsStreamAsync()),
-					new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
-
-			}
-            catch (Exception e)
-            {
-                throw new Exception("Grešta, neispravni podaci");
-            }
-        }
 
 		public async Task<UserDTO> GetUserByUsername(string username)
 		{
 
 			try
 			{
-				var request = new HttpRequestMessage(HttpMethod.Get, $"api/User/{username}");
+				var request = new HttpRequestMessage(HttpMethod.Get, $"api/SiteUser/{username}");
 
 				request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
 				var content = new StringContent("", null, "application/json");
@@ -492,10 +469,9 @@ namespace WebApplication_BusTimeline.Service
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Neispravnan username ili password");
+				throw new Exception("Nepostojeći username ");
 			}
 		}
-
 
         public async Task<IEnumerable<CrossroadDTO>> GetAllCrossroads()
         {

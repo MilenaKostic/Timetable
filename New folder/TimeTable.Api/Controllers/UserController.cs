@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using TimeTable.Api.Entities.Models;
 using TimeTable.Api.Interfaces;
 using Shared.DTO;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TimeTable.Api.Controllers
 {
@@ -17,6 +20,40 @@ namespace TimeTable.Api.Controllers
 			_repository = repository;
 		}
 
+		//[HttpPost]
+		//public async Task<IActionResult> CreateUser([FromBody] UserForRegistrationDTO user)
+		//{
+		//	var UserEntity = new SiteUser()
+		//	{
+		//		FirstName = user.FirstName,
+		//		LastName = user.LastName,
+		//		Email = user.Email,
+		//		Username = user.UserName,
+		//		Password = ComputeSHA256Hash(user.Password)
+		//	};
+
+		//	static string ComputeSHA256Hash(string input)
+		//	{
+		//		using (SHA256 sha256 = SHA256.Create())
+		//		{
+		//			byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+		//			return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+		//		}
+		//	}
+
+		//	_repository.(UserEntity);
+
+		//	await _repository.SaveAsync();
+
+		//	var userbasic = new UserGetBasicDTO()
+		//	{
+		//		Id = UserEntity.Id,
+		//		Name = UserEntity.FirstName,
+		//		Email = UserEntity.Email
+		//	};
+
+		//	return CreatedAtRoute("UserById", new { Id = userbasic.Id }, userbasic);
+		//}
 
 		[HttpGet(Name = "AllUsers")]
 		public async Task<IActionResult> GetUser()

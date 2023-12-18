@@ -5,15 +5,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Leaflet Routing Example</title>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
 	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 	<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-
-
-
+	<script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
 
 	<style>
 		body {
@@ -31,7 +28,6 @@
 		}
 
 	</style>
-	<title>Responsive Design Example</title>
 </head>
 
 
@@ -60,9 +56,11 @@
 
 }
 
+  
 @if (Model.RouteId != null && string.IsNullOrEmpty(Model.ErrorMessage))
 {
 	<div><h7> Trenutno prikazana ruta je: @Model.RouteWithStop.Name </h7></div>
+	
 }
 
 <div id="map" style="height: 600px;"></div>
@@ -79,6 +77,8 @@
 		var markerLatLng = marker.getLatLng();
 		map.setView(markerLatLng, 16);
 	}
+
+	var colorr;
 
 	var coordinates = [];
 	var markers = [];
@@ -98,6 +98,7 @@
 		@for(int i=0; i<Model.RouteWithStop?.Stops.Count(); i++)
 		{
 			@:markers.push({ lat: "@Model.RouteWithStop.Stops[i].Stop.Lat.ToString().Replace(',','.')", lon: "@Model.RouteWithStop.Stops[i].Stop.Lon.ToString().Replace(',','.')" });
+			@:colorr = '@Model.RouteWithStop.Color';
 		}
 	}
 
@@ -115,31 +116,6 @@
 	var marker = L.marker([markers[i].lat, markers[i].lon]).addTo(map);
 	}
 
-	var control = L.Routing.control({
-		waypoints: [
-			L.latLng(44.977300, 19.611058),  // Start point
-			L.latLng(45.000000, 19.800000)   // End point
-		],
-		routeWhileDragging: true,
-		geocoder: L.Control.Geocoder.nominatim(),
-	}).addTo(map);
-
-	// Disable dragging for each waypoint marker
-	control.on('waypointschanged', function () {
-		control.getWaypoints().forEach(function (waypoint) {
-			waypoint.marker.dragging.disable();
-		});
-	});
-
-	// var busRoute = L.polyline(
-	// 	[coordinates],
-	// 	{
-	// 		color: 'red',
-	// 		weight: 3,
-	// 		opacity: 0.5,
-	// 		smoothFactor: 1,
-	// 	}).addTo(map);
-
 	for (var i = 0; i < circles.length; i++) {
 		var randomOpacity = Math.random();
 		var circle = L.circle([circles[i].lat, circles[i].lon], {
@@ -150,7 +126,29 @@
 		}).addTo(map);
 
 	}
+
+	var BrMarkers = markers.length;
+	var startPoint = L.latLng(markers[0].lat, markers[0].lon);
+	var endPoint = L.latLng(markers[BrMarkers-1].lat, markers[BrMarkers-1].lon);
 	
+
+	console.log(startPoint);
+	console.log(BrMarkers);
+	console.log(endPoint);
+
+	var waypoints = markers.map(function (marker) {
+		return L.latLng(marker.lat, marker.lon);
+	});
+
+	L.Routing.control({
+		waypoints: waypoints,
+		routeWhileDragging: true,
+		lineOptions: {
+			styles: [{ color: colorr, opacity: 1, weight: 4 }]
+		},
+		show:false, 
+	}).addTo(map);
+
 
 
 </script>

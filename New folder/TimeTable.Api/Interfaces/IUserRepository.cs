@@ -4,7 +4,7 @@ namespace TimeTable.Api.Interfaces
 {
 	public interface IUserRepository
 	{
-		void CreateUser(User user);
+		//void CreateUser(SiteUser user);
 		Task<IEnumerable<User>> GetAll();
 		Task<User> GetById(int Id, Boolean trackChanges);
 		Task<User> GetByName(string Name);

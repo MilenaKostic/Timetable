@@ -7,6 +7,7 @@
 		IRouteStopRepository RouteStop { get; }
 		IUserRepository User { get; }
 		IShapeRepository Shape { get; }
+		ISiteUserRepository SiteUser { get; }
 		Task SaveAsync();
 	}
 }

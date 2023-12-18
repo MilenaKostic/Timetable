@@ -35,6 +35,7 @@ namespace TimeTable.Api.Repositories
 		public DbSet<User> Users { get; set; }
 		public DbSet<RouteStop> RouteStops { get; set; }
 		public DbSet<Shape> Shapes { get; set; }
+		public DbSet<SiteUser> SiteUsers {  get; set; }
 
 	}
 }

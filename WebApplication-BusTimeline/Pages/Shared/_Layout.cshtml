@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApplication_BusTimeline.styles.css" asp-append-version="true" />
 
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -24,18 +40,22 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="RedVoznje">Red vožnje</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Routes/RoutesView">Rute</a>
                         </li>
+                      
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Routes/RoutesView2">Rute Admin</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Routes/RoutesView2">Detalji rute</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Routes/AddRoute">Dodaj Rutu Admin</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Routes/AddRoute">Dodaj rutu</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Stops/AddStops">Dodaj stanicu Admin</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Stops/AddStops">Dodaj stanicu</a>
                             </li>
                         
                         }
@@ -49,10 +69,21 @@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <ul class="navbar-nav ">
+                     @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-black" asp-page="/Login/Logout">Logout</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-black" asp-page="/Login/Login">Login</a>
-                        </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-black" asp-page="/Login/Login">Login</a>
+                            </li>
+                            
+                        }
+                      
                     </ul>
                 </div>
             </div>
